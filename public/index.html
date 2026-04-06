@@ -1,578 +1,729 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARC Meeting Review</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ARC Decision Portal — Agency Staffing</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:          #F8F7F4;
+    --surface:     #FFFFFF;
+    --border:      #E3E1DA;
+    --border-md:   #C8C6BC;
+    --text:        #1A1917;
+    --muted:       #6B6960;
+    --subtle:      #9B9890;
+    --blue-bg:     #E8F0FA;
+    --blue:        #1A5FAD;
+    --blue-text:   #0D3D73;
+    --green-bg:    #EAF5E9;
+    --green:       #2E7D32;
+    --green-text:  #1B5E20;
+    --amber-bg:    #FFF8E1;
+    --amber-text:  #92400E;
+    --red-bg:      #FEF2F2;
+    --red:         #DC2626;
+    --red-text:    #991B1B;
+    --purple-bg:   #F3F0FF;
+    --purple-text: #4C1D95;
+    --radius-sm:   6px;
+    --radius:      10px;
+    --radius-lg:   14px;
+    --shadow:      0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:   0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  }
+  html { font-size: 15px; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
 
-    :root {
-      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --bg:          #ffffff;
-      --bg2:         #f7f7f5;
-      --bg3:         #f0efec;
-      --border:      rgba(0,0,0,0.11);
-      --border2:     rgba(0,0,0,0.22);
-      --text:        #1a1a1a;
-      --text2:       #666;
-      --text3:       #999;
-      --blue:        #185fa5;
-      --blue-bg:     #e6f1fb;
-      --blue-text:   #0c447c;
-      --green:       #3b6d11;
-      --green-bg:    #eaf3de;
-      --green-text:  #27500a;
-      --amber-bg:    #faeeda;
-      --amber-text:  #854f0b;
-      --red:         #a32d2d;
-      --red-bg:      #fcebeb;
-      --red-text:    #791f1f;
-      --gray-bg:     #f1efe8;
-      --gray-text:   #5f5e5a;
-      --radius:      8px;
-      --radius-lg:   12px;
-    }
+  /* Header */
+  .app-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 58px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
+  .brand-icon svg { fill: white; width: 16px; height: 16px; }
+  .brand-name { font-size: 14px; font-weight: 600; letter-spacing: -.01em; }
+  .brand-sub  { font-size: 12px; color: var(--muted); margin-top: -1px; }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:         #1c1c1a;
-        --bg2:        #252523;
-        --bg3:        #2e2e2b;
-        --border:     rgba(255,255,255,0.10);
-        --border2:    rgba(255,255,255,0.20);
-        --text:       #f0f0ee;
-        --text2:      #aaa;
-        --text3:      #666;
-        --blue-bg:    #0c2d4a;
-        --blue-text:  #85b7eb;
-        --green-bg:   #172d08;
-        --green-text: #97c459;
-        --amber-bg:   #3a2500;
-        --amber-text: #fac775;
-        --red-bg:     #3a1010;
-        --red-text:   #f09595;
-        --gray-bg:    #2c2c2a;
-        --gray-text:  #aaa;
-      }
-    }
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: all .15s; white-space: nowrap; }
+  .btn:hover { background: var(--bg); }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: white; }
+  .btn-primary:hover { background: var(--blue-text); border-color: var(--blue-text); }
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-    body { font-family: var(--font); color: var(--text); background: var(--bg); font-size: 14px; line-height: 1.5; }
+  /* Layout */
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-    /* ── Layout ── */
-    .wrap { max-width: 1440px; margin: 0 auto; padding: 1.5rem 1.25rem; }
+  /* Stats bar */
+  .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 2rem; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+  .s-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
+  .s-value { font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: var(--text); }
+  .stat-card.s-pending .s-value { color: var(--amber-text); }
+  .stat-card.s-done    .s-value { color: var(--green-text); }
+  .s-time { font-size: 13px !important; font-weight: 500 !important; color: var(--muted) !important; letter-spacing: 0 !important; }
 
-    /* ── Header ── */
-    .hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 1rem; margin-bottom: 1.5rem;
-      border-bottom: 0.5px solid var(--border);
-      flex-wrap: wrap; gap: 10px;
-    }
-    .hdr-title   { font-size: 18px; font-weight: 600; }
-    .hdr-sub     { font-size: 12px; color: var(--text2); margin-top: 2px; }
-    .hdr-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  /* Tabs */
+  .section-nav { display: flex; gap: 4px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .nav-tab { padding: 9px 18px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; gap: 6px; }
+  .nav-tab:hover { color: var(--text); background: var(--bg); }
+  .nav-tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+  .tab-count { display: inline-flex; align-items: center; justify-content: center; background: var(--blue-bg); color: var(--blue-text); border-radius: 20px; font-size: 11px; font-weight: 600; min-width: 20px; height: 18px; padding: 0 6px; }
+  .nav-tab.active .tab-count { background: var(--blue); color: white; }
 
-    /* ── Stat cards ── */
-    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1.5rem; }
-    .stat  { background: var(--bg2); border-radius: var(--radius); padding: .75rem 1rem; }
-    .stat-lbl { font-size: 11px; text-transform: uppercase; letter-spacing:.04em; color: var(--text2); margin-bottom: 4px; }
-    .stat-val { font-size: 24px; font-weight: 600; }
-    .c-amber { color: var(--amber-text); }
-    .c-green { color: var(--green-text); }
-    .c-red   { color: var(--red-text);   }
+  /* Panels */
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
 
-    /* ── Filters ── */
-    .filters { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
-    .fbtn {
-      font-size: 12px; padding: 4px 14px; border-radius: 20px;
-      border: 0.5px solid var(--border2); background: transparent;
-      color: var(--text2); cursor: pointer; transition: all .12s;
-    }
-    .fbtn.on { background: var(--blue-bg); color: var(--blue-text); border-color: var(--blue); }
-    .fbtn:hover:not(.on) { background: var(--bg2); }
-    .search {
-      flex: 1; min-width: 180px; font-size: 13px; padding: 5px 10px;
-      border: 0.5px solid var(--border); border-radius: var(--radius);
-      background: var(--bg); color: var(--text); font-family: var(--font);
-    }
-    .search:focus { outline: none; border-color: var(--blue); }
+  /* Filter row */
+  .filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .filter-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .chip { padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; border: 1px solid var(--border-md); background: var(--surface); color: var(--muted); cursor: pointer; transition: all .12s; }
+  .chip:hover { border-color: var(--blue); color: var(--blue); }
+  .chip.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .spacer { flex: 1; }
+  .result-count { font-size: 12px; color: var(--muted); }
 
-    /* ── Table ── */
-    .tbl-wrap { overflow-x: auto; border: 0.5px solid var(--border); border-radius: var(--radius-lg); }
-    table  { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead th {
-      font-size: 11px; font-weight: 600; color: var(--text2); text-align: left;
-      padding: 8px 10px; border-bottom: 0.5px solid var(--border);
-      background: var(--bg2); white-space: nowrap;
-    }
-    tbody tr { border-bottom: 0.5px solid var(--border); transition: background .1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--bg2); }
-    tbody td { padding: 8px 10px; vertical-align: top; }
+  /* Bulk bar */
+  .bulk-bar { display: flex; align-items: center; justify-content: space-between; background: var(--blue-bg); border: 1px solid var(--blue); border-radius: var(--radius); padding: 10px 16px; margin-bottom: 14px; font-size: 13px; color: var(--blue-text); font-weight: 500; }
+  .bulk-bar.hidden { display: none; }
 
-    .id-cell  { font-weight: 600; color: var(--blue-text); font-size: 12px; white-space: nowrap; }
-    .dim      { color: var(--text2); font-size: 12px; }
-    .ell      { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden; transition: box-shadow .15s, border-color .15s; }
+  .card:hover { box-shadow: var(--shadow-md); border-color: var(--border-md); }
+  .card.decided { border-left: 3px solid var(--green); }
+  .card-header { padding: 13px 18px 11px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; cursor: pointer; user-select: none; }
+  .card-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .req-id    { font-size: 12px; font-weight: 700; color: var(--blue-text); white-space: nowrap; }
+  .req-title { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .req-meta  { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .badge-pending  { background: var(--amber-bg);  color: var(--amber-text); }
+  .badge-approved { background: var(--green-bg);  color: var(--green-text); }
+  .badge-declined { background: var(--red-bg);    color: var(--red-text);   }
+  .badge-hold     { background: var(--blue-bg);   color: var(--blue-text);  }
+  .badge-consult  { background: var(--purple-bg); color: var(--purple-text);}
+  .chevron { color: var(--subtle); transition: transform .2s; }
+  .chevron.open { transform: rotate(180deg); }
 
-    /* ── Badges ── */
-    .badge     { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
-    .b-pending { background: var(--amber-bg); color: var(--amber-text); }
-    .b-approve { background: var(--green-bg);  color: var(--green-text); }
-    .b-deny    { background: var(--red-bg);    color: var(--red-text);   }
-    .b-tabled  { background: var(--gray-bg);   color: var(--gray-text);  border: 0.5px solid var(--border); }
+  .card-body { padding: 0 18px 16px; border-top: 1px solid var(--border); }
+  .card-body.hidden { display: none; }
 
-    /* ── Inline form controls ── */
-    .sel, .txa {
-      font-size: 12px; padding: 4px 6px; width: 100%;
-      border: 0.5px solid var(--border2); border-radius: var(--radius);
-      background: var(--bg); color: var(--text); font-family: var(--font);
-    }
-    .txa { resize: vertical; min-height: 36px; }
-    .sel:focus, .txa:focus { outline: none; border-color: var(--blue); }
+  /* Detail grid */
+  .details-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(175px,1fr)); gap: 10px 20px; padding: 14px 0 12px; }
+  .dg-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); display: block; margin-bottom: 2px; }
+  .dg-field span  { font-size: 13px; color: var(--text); line-height: 1.4; }
 
-    /* ── Buttons ── */
-    .btn {
-      font-size: 12px; padding: 5px 12px; border-radius: var(--radius);
-      border: 0.5px solid var(--border2); background: transparent; color: var(--text);
-      cursor: pointer; white-space: nowrap; transition: all .12s; font-family: var(--font);
-    }
-    .btn:hover:not(:disabled) { background: var(--bg2); }
-    .btn:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-save  { width: 100%; font-size: 11px; padding: 4px 8px; }
-    .btn-save:hover:not(:disabled) { background: var(--green-bg); color: var(--green-text); border-color: var(--green); }
-    .btn-save.saving { opacity: .5; cursor: not-allowed; }
-    .btn-save.saved  { background: var(--green-bg);  color: var(--green-text); border-color: var(--green); }
-    .btn-save.err    { background: var(--red-bg);    color: var(--red-text);   border-color: var(--red);   }
-    .btn-primary {
-      font-size: 13px; padding: 7px 16px; font-weight: 600;
-      background: var(--green-bg); color: var(--green-text);
-      border-color: var(--green);
-    }
-    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-detail {
-      font-size: 11px; color: var(--blue-text); background: none; border: none;
-      cursor: pointer; text-decoration: underline; margin-top: 4px;
-      display: block; width: 100%; text-align: center; font-family: var(--font);
-    }
-    .pill-changes {
-      font-size: 12px; padding: 4px 12px; border-radius: 20px;
-      background: var(--amber-bg); color: var(--amber-text);
-    }
+  /* Justification */
+  .justif-wrap { margin-bottom: 14px; }
+  .justif-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); margin-bottom: 5px; }
+  .justif-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: var(--muted); line-height: 1.65; max-height: 110px; overflow: hidden; position: relative; }
+  .justif-box.expanded { max-height: none; }
+  .justif-box.collapsed::after { content:''; position:absolute; bottom:0; left:0; right:0; height:32px; background:linear-gradient(transparent,var(--bg)); pointer-events:none; }
+  .expand-btn { font-size:11px; color:var(--blue); cursor:pointer; background:none; border:none; padding:4px 0 0; display:block; }
+  .expand-btn:hover { text-decoration:underline; }
 
-    /* ── States ── */
-    .state {
-      text-align: center; padding: 3rem 1rem;
-      color: var(--text2); font-size: 14px;
-    }
-    .state.err {
-      color: var(--red-text); background: var(--red-bg);
-      border-radius: var(--radius-lg); margin: 1rem 0;
-    }
-    .spinner {
-      width: 28px; height: 28px; margin: 0 auto 1rem;
-      border: 2px solid var(--border); border-top-color: var(--blue);
-      border-radius: 50%; animation: spin .7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+  /* Decision row */
+  .decision-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; border-top: 1px solid var(--border); padding-top: 12px; }
+  .decision-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 5px; }
+  .decision-field select, .decision-field textarea { width: 100%; font-size: 13px; font-family: inherit; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: border-color .12s; }
+  .decision-field select:focus, .decision-field textarea:focus { outline: none; border-color: var(--blue); }
+  .decision-field textarea { resize: vertical; min-height: 62px; }
+  .save-btn { padding: 9px 18px; font-size: 13px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--blue); background: var(--blue); color: white; cursor: pointer; transition: all .15s; white-space: nowrap; align-self: end; }
+  .save-btn:hover:not(:disabled) { background: var(--blue-text); border-color: var(--blue-text); }
+  .save-btn:disabled { opacity:.5; cursor:not-allowed; }
+  .save-btn.saving { background:var(--muted); border-color:var(--muted); }
+  .save-btn.saved  { background:var(--green); border-color:var(--green); }
+  .save-btn.error  { background:var(--red);   border-color:var(--red); }
 
-    /* ── Modal ── */
-    .overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.45);
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 2rem 1rem; z-index: 1000; overflow-y: auto;
-    }
-    .modal {
-      background: var(--bg); border-radius: var(--radius-lg);
-      border: 0.5px solid var(--border2);
-      width: 100%; max-width: 640px; padding: 1.5rem; margin-bottom: 2rem;
-    }
-    .modal-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
-    .modal-hdr h2 { font-size: 16px; font-weight: 600; }
-    .modal-close { background: none; border: none; cursor: pointer; font-size: 22px; color: var(--text2); line-height: 1; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
-    .fld-lbl { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 3px; }
-    .fld-val { font-size: 13px; }
-    .fld-long {
-      font-size: 12px; color: var(--text2); line-height: 1.65;
-      max-height: 150px; overflow-y: auto;
-      background: var(--bg2); padding: 8px; border-radius: var(--radius);
-    }
+  /* States */
+  .loading-state { text-align:center; padding:4rem 2rem; color:var(--muted); font-size:14px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .empty-state { text-align:center; padding:3rem 2rem; color:var(--muted); font-size:14px; }
+  .error-state  { text-align:center; padding:3rem 2rem; color:var(--red-text); font-size:14px; }
 
-    @media (max-width: 600px) {
-      .stats { grid-template-columns: repeat(2,1fr); }
-      .grid2 { grid-template-columns: 1fr; }
-    }
-  </style>
+  /* Toast */
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--text); color:white; padding:10px 20px; border-radius:var(--radius); font-size:13px; font-weight:500; box-shadow:var(--shadow-md); transition:transform .25s cubic-bezier(.34,1.56,.64,1); z-index:999; pointer-events:none; white-space:nowrap; }
+  #toast.show { transform:translateX(-50%) translateY(0); }
+  #toast.ok   { background:var(--green); }
+  #toast.err  { background:var(--red); }
+
+  /* Responsive */
+  @media (max-width:680px) {
+    .stats-bar { grid-template-columns:repeat(2,1fr); }
+    .decision-row { grid-template-columns:1fr; }
+    .details-grid { grid-template-columns:1fr 1fr; }
+    .app-header { padding:0 1rem; }
+    .container { padding:1.25rem 1rem 3rem; }
+    .header-actions .btn span { display:none; }
+  }
+</style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- Header -->
-  <header class="hdr">
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 20 20"><path d="M10 2C5.6 2 2 5.6 2 10s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm1 11H9V9h2v4zm0-6H9V5h2v2z"/></svg>
+    </div>
     <div>
-      <div class="hdr-title">ARC Meeting Review Log</div>
-      <div class="hdr-sub">Agency Staffing — Stakeholder Decision Interface</div>
+      <div class="brand-name">ARC Decision Portal</div>
+      <div class="brand-sub">Agency Staffing · Agency Request Committee</div>
     </div>
-    <div class="hdr-actions">
-      <span class="pill-changes" id="pill" style="display:none"></span>
-      <button class="btn btn-primary" id="btn-submit-all" onclick="submitAll()" disabled>Submit all decisions</button>
-      <button class="btn" onclick="loadData()">↻ Refresh</button>
-    </div>
-  </header>
+  </div>
+  <div class="header-actions">
+    <button class="btn" onclick="refreshAll()">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4.5 9A5.5 5.5 0 0115 6.2V4l3 3-3 3V8a4 4 0 10.9 5H17a5.5 5.5 0 01-12.5-4z"/></svg>
+      <span>Refresh</span>
+    </button>
+    <button class="btn btn-primary" onclick="submitAllPending()">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+      <span>Submit all decisions</span>
+    </button>
+  </div>
+</header>
 
-  <!-- Stats -->
-  <div class="stats" id="stats" style="display:none">
-    <div class="stat"><div class="stat-lbl">Total requests</div><div class="stat-val" id="s-total">—</div></div>
-    <div class="stat"><div class="stat-lbl">Pending decision</div><div class="stat-val c-amber" id="s-pending">—</div></div>
-    <div class="stat"><div class="stat-lbl">Approved</div><div class="stat-val c-green" id="s-approved">—</div></div>
-    <div class="stat"><div class="stat-lbl">Denied</div><div class="stat-val c-red" id="s-denied">—</div></div>
+<main class="container">
+  <div class="stats-bar">
+    <div class="stat-card"><div class="s-label">Total requests</div><div class="s-value" id="stat-total">—</div></div>
+    <div class="stat-card s-pending"><div class="s-label">Pending decision</div><div class="s-value" id="stat-pending">—</div></div>
+    <div class="stat-card s-done"><div class="s-label">Decisions saved</div><div class="s-value" id="stat-saved">—</div></div>
+    <div class="stat-card"><div class="s-label">Last refreshed</div><div class="s-value s-time" id="stat-time">—</div></div>
   </div>
 
-  <!-- Main -->
-  <div id="main"></div>
+  <div class="section-nav">
+    <button class="nav-tab active" onclick="switchTab('initial',this)">
+      Pending Initial Requests <span class="tab-count" id="tc-initial">—</span>
+    </button>
+    <button class="nav-tab" onclick="switchTab('extension',this)">
+      Pending Extension Requests <span class="tab-count" id="tc-extension">—</span>
+    </button>
+  </div>
 
-</div>
+  <div class="section-panel active" id="panel-initial">
+    <div class="filter-row">
+      <span class="filter-label">Filter:</span>
+      <button class="chip active" onclick="setFilter('initial','all',this)">All</button>
+      <button class="chip" onclick="setFilter('initial','pending',this)">Needs decision</button>
+      <button class="chip" onclick="setFilter('initial','decided',this)">Decided</button>
+      <div class="spacer"></div>
+      <span class="result-count" id="count-initial"></span>
+    </div>
+    <div class="bulk-bar hidden" id="bulk-initial">
+      <span id="bulk-msg-initial"></span>
+      <button class="btn btn-primary" style="padding:5px 14px;font-size:12px" onclick="saveSection('initial')">Save all unsaved</button>
+    </div>
+    <div id="cards-initial">
+      <div class="loading-state"><div class="spinner"></div>Loading from Smartsheet…</div>
+    </div>
+  </div>
 
-<!-- Modal root -->
-<div id="modal-root"></div>
+  <div class="section-panel" id="panel-extension">
+    <div class="filter-row">
+      <span class="filter-label">Filter:</span>
+      <button class="chip active" onclick="setFilter('extension','all',this)">All</button>
+      <button class="chip" onclick="setFilter('extension','pending',this)">Needs decision</button>
+      <button class="chip" onclick="setFilter('extension','decided',this)">Decided</button>
+      <div class="spacer"></div>
+      <span class="result-count" id="count-extension"></span>
+    </div>
+    <div class="bulk-bar hidden" id="bulk-extension">
+      <span id="bulk-msg-extension"></span>
+      <button class="btn btn-primary" style="padding:5px 14px;font-size:12px" onclick="saveSection('extension')">Save all unsaved</button>
+    </div>
+    <div id="cards-extension">
+      <div class="loading-state"><div class="spinner"></div>Loading from Smartsheet…</div>
+    </div>
+  </div>
+</main>
+<div id="toast"></div>
 
 <script>
-/* ── CONFIG — set via environment, injected at build time ─────────────── */
-const REPORT_ID   = '7288028541177732';
-const SHEET_ID    = '4795627573563268';
-const DEC_COL_ID  = 2002017168084868;   // Agency Request Committee Decision
-const CMT_COL_ID  = 6505616795455364;   // Agency Request Committee Comments
+// ── CONFIG ──────────────────────────────────────────────────
+const API_URL = 'https://api.anthropic.com/v1/messages';
+const MCP_URL = 'https://mcp.smartsheet.com';
+const MODEL   = 'claude-sonnet-4-20250514';
 
-/* ── State ────────────────────────────────────────────────────────────── */
-let rows    = [];
-let changes = {};          // rowId → { decision?, comment?, status? }
-let filter  = 'all';
+// Report IDs
+const ARC_REPORT_ID = 7288028541177732;  // ARC Meeting Review Log  (Initial)
+const EXT_REPORT_ID = 1835552375525252;  // Pending Requests for Extension
 
-/* ── API calls (to our own Express backend — no keys in browser) ─────── */
-async function apiFetch(path, opts = {}) {
-  const res = await fetch(path, {
-    headers: { 'Content-Type': 'application/json' },
-    ...opts
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `HTTP ${res.status}`);
-  }
-  return res.json();
+// Source sheet IDs (for writes)
+const INITIAL_SHEET_ID   = 4795627573563268;
+const EXTENSION_SHEET_ID = 4073630020358020;
+
+// ARC Meeting Review Log — virtual column IDs
+const ARC = {
+  REQ_ID:     7605966703644548,
+  REQUESTOR:  6480066796801924,
+  JOB_TITLE:  146879820812164,
+  JOB_CODE:   4650479448182660,
+  PID:        8591129122131844,
+  RTH:        4931954424893316,
+  PHASE:      1554254704365444,
+  JUSTIF:     8028179168710532,
+  DECISION:   6057854331735940,
+  COMMENTS:   3806054518050692,
+  DEPT:       183945589903236,
+  CATEGORY:   8731866610487172,
+  LOCATION:   2398679634497412,
+  WORKDAYS:   6902279261867908,
+  SHIFT:      1272779727654788,
+  HOURS:      5776379355025284,
+  DURATION:   3524579541340036,
+  VACANCIES:  709829774233476,
+  CURRENT_AGY:5213429401603972,
+  UNION:      2961629587918724,
+  UNION_GRP:  7465229215289220,
+  RATE:       1835729681076100,
+  OFFICE:     6339329308446596,
+  ACCOUNT:    4087529494761348,
+  OVERTIME:   428354797522820,
+  POSTED:     2680154611208068,
+  OT_UTIL:    7183754238578564,
+};
+
+// Pending Requests for Extension — virtual column IDs
+const EXT = {
+  REQ_ID:   3416718167461764,
+  NAME:     1986256156970884,
+  DEPT:     3015893458833284,
+  TITLE:    7519493086203780,
+  LOCATION: 6393593179361156,
+  MONTHS:   1518584879337348,
+  RECRUIT:  7935691016408964,
+  DECISION: 3150034705796996,
+  COMMENTS: 7653634333167492,
+};
+
+const COMMITTEE_OPTIONS = ['Approved','Declined','Needs to Consult with BHR','Hold'];
+
+// ── STATE ────────────────────────────────────────────────────
+const state = {
+  initial:   { rows:[], filter:'all', decisions:{}, saved:new Set() },
+  extension: { rows:[], filter:'all', decisions:{}, saved:new Set() },
+};
+
+// ── HELPERS ──────────────────────────────────────────────────
+function cv(cells, vcid) {
+  const c = cells.find(x => Number(x.virtual_column_id) === Number(vcid));
+  return c ? (c.display_value || c.value || '') : '';
+}
+function s(cells, vcid) { return String(cv(cells, vcid) || '').trim(); }
+
+function badgeClass(d) {
+  if (!d) return 'badge-pending';
+  const m = d.toLowerCase();
+  if (m === 'approved') return 'badge-approved';
+  if (m === 'declined') return 'badge-declined';
+  if (m === 'hold')     return 'badge-hold';
+  return 'badge-consult';
+}
+function badgeLabel(d) { return d || 'Pending'; }
+
+function esc(str) {
+  return String(str||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── Load report ──────────────────────────────────────────────────────── */
-async function loadData() {
-  setMain(loadingHTML('Loading ARC Meeting Review Log…'));
-  document.getElementById('stats').style.display = 'none';
-  changes = {};
-  updatePill();
-
-  try {
-    const data = await apiFetch(`/api/report/${REPORT_ID}?pageSize=500`);
-    rows = data.rows;
-    updateStats();
-    renderFilters();
-    renderTable();
-  } catch (e) {
-    setMain(`<div class="state err"><strong>Failed to load data:</strong> ${e.message}<br><br>
-      <button class="btn" onclick="loadData()">Try again</button></div>`);
-  }
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = type ? `show ${type}` : 'show';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.className = ''; }, 3200);
 }
 
-/* ── Save a single row ────────────────────────────────────────────────── */
-async function saveRow(rowId) {
-  const row    = rows.find(r => r.rowId === rowId);
-  const change = changes[rowId];
-  if (!row || !change) return;
-
-  change.status = 'saving';
-  renderTable();
-
-  const dec = change.decision !== undefined ? change.decision : (row.cells['Agency Request Committee Decision'] || '');
-  const cmt = change.comment  !== undefined ? change.comment  : (row.cells['Agency Request Committee Comments'] || '');
-
-  try {
-    await apiFetch(`/api/sheet/${row.sheetId}/row/${rowId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        cells: [
-          { columnId: DEC_COL_ID, value: dec },
-          { columnId: CMT_COL_ID, value: cmt }
-        ]
-      })
-    });
-
-    // Persist locally
-    row.cells['Agency Request Committee Decision'] = dec;
-    row.cells['Agency Request Committee Comments'] = cmt;
-    change.status = 'saved';
-
-    setTimeout(() => {
-      delete changes[rowId];
-      updatePill();
-      renderTable();
-      updateStats();
-    }, 1800);
-
-  } catch (e) {
-    change.status = 'error';
-    console.error('Save error:', e.message);
-  }
-
-  updatePill();
-  renderTable();
-}
-
-async function submitAll() {
-  for (const id of Object.keys(changes)) {
-    if (changes[id].status !== 'saving') await saveRow(id);
-  }
-}
-
-/* ── Change handlers ──────────────────────────────────────────────────── */
-function onDec(rowId, val) {
-  if (!changes[rowId]) changes[rowId] = {};
-  changes[rowId].decision = val;
-  delete changes[rowId].status;
-  updatePill();
-}
-function onCmt(rowId, val) {
-  if (!changes[rowId]) changes[rowId] = {};
-  changes[rowId].comment = val;
-  delete changes[rowId].status;
-  updatePill();
-}
-
-/* ── UI helpers ───────────────────────────────────────────────────────── */
-function setMain(html) { document.getElementById('main').innerHTML = html; }
-
-function loadingHTML(msg) {
-  return `<div class="state"><div class="spinner"></div>${msg}</div>`;
-}
-
-function badge(val) {
-  if (!val) return '<span class="badge b-pending">Pending</span>';
-  const v = val.toLowerCase();
-  if (v.includes('approv'))                       return `<span class="badge b-approve">${val}</span>`;
-  if (v.includes('den') || v.includes('reject'))  return `<span class="badge b-deny">${val}</span>`;
-  if (v.includes('table'))                        return `<span class="badge b-tabled">${val}</span>`;
-  return `<span class="badge b-pending">${val}</span>`;
-}
-
-function fmtDate(iso) {
-  if (!iso) return '—';
-  try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' }); }
-  catch { return iso.slice(0, 10); }
-}
-
-function cv(row, ...keys) {
-  for (const k of keys) { if (row.cells[k]) return row.cells[k]; }
-  return '—';
-}
-
-/* ── Stats ────────────────────────────────────────────────────────────── */
 function updateStats() {
-  let pending = 0, approved = 0, denied = 0;
-  rows.forEach(r => {
-    const d = (r.cells['Agency Request Committee Decision'] || '').toLowerCase();
-    if (!d)                                              pending++;
-    else if (d.includes('approv'))                       approved++;
-    else if (d.includes('den') || d.includes('reject'))  denied++;
-    else                                                 pending++;
+  let total=0, pending=0, saved=0;
+  ['initial','extension'].forEach(sec => {
+    const st = state[sec];
+    total   += st.rows.length;
+    pending += st.rows.filter(r => !(st.decisions[r.id]||{}).decision).length;
+    saved   += st.saved.size;
   });
-  document.getElementById('s-total').textContent   = rows.length;
-  document.getElementById('s-pending').textContent = pending;
-  document.getElementById('s-approved').textContent = approved;
-  document.getElementById('s-denied').textContent  = denied;
-  document.getElementById('stats').style.display   = 'grid';
+  document.getElementById('stat-total').textContent   = total   || '—';
+  document.getElementById('stat-pending').textContent = total ? pending : '—';
+  document.getElementById('stat-saved').textContent   = saved   || '0';
+  document.getElementById('stat-time').textContent    =
+    new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('tc-initial').textContent   = state.initial.rows.length   || '0';
+  document.getElementById('tc-extension').textContent = state.extension.rows.length || '0';
 }
 
-/* ── Pill ─────────────────────────────────────────────────────────────── */
-function updatePill() {
-  const n   = Object.keys(changes).length;
-  const el  = document.getElementById('pill');
-  const btn = document.getElementById('btn-submit-all');
+function updateBulkBar(section) {
+  const st = state[section];
+  const n  = st.rows.filter(r => (st.decisions[r.id]||{}).decision && !st.saved.has(r.id)).length;
+  const bar = document.getElementById('bulk-'+section);
   if (n > 0) {
-    el.style.display = 'inline-block';
-    el.textContent   = `${n} unsaved change${n !== 1 ? 's' : ''}`;
-    btn.disabled     = false;
+    bar.classList.remove('hidden');
+    document.getElementById('bulk-msg-'+section).textContent =
+      n + ' decision' + (n!==1?'s':'') + ' ready to save';
   } else {
-    el.style.display = 'none';
-    btn.disabled     = true;
+    bar.classList.add('hidden');
   }
 }
 
-/* ── Filters ──────────────────────────────────────────────────────────── */
-function setFilter(f) {
-  filter = f;
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('on', b.dataset.f === f));
-  renderTable();
+// ── NAVIGATION ───────────────────────────────────────────────
+function switchTab(section, btn) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+section).classList.add('active');
 }
 
-function filteredRows() {
-  const q = (document.getElementById('search')?.value || '').toLowerCase();
-  return rows.filter(r => {
-    const d = r.cells['Agency Request Committee Decision'] || '';
-    if (filter === 'pending' && d)  return false;
-    if (filter === 'decided' && !d) return false;
-    if (!q) return true;
-    return Object.values(r.cells).some(v => String(v).toLowerCase().includes(q));
+function setFilter(section, f, btn) {
+  state[section].filter = f;
+  btn.closest('.filter-row').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderSection(section);
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function renderSection(section) {
+  const st      = state[section];
+  const visible = st.rows.filter(r => {
+    const d = (st.decisions[r.id]||{}).decision||'';
+    if (st.filter==='pending') return !d;
+    if (st.filter==='decided') return !!d;
+    return true;
   });
-}
+  document.getElementById('count-'+section).textContent =
+    visible.length + ' request' + (visible.length!==1?'s':'');
+  updateBulkBar(section);
 
-function renderFilters() {
-  const np = rows.filter(r => !r.cells['Agency Request Committee Decision']).length;
-  const nd = rows.filter(r =>  r.cells['Agency Request Committee Decision']).length;
-  const filtersHTML = `
-    <div class="filters">
-      <button class="fbtn on" data-f="all"     onclick="setFilter('all')">All (${rows.length})</button>
-      <button class="fbtn"    data-f="pending" onclick="setFilter('pending')">Pending (${np})</button>
-      <button class="fbtn"    data-f="decided" onclick="setFilter('decided')">Decided (${nd})</button>
-      <input class="search" id="search" type="text"
-        placeholder="Search by name, position, department…" oninput="renderTable()">
-    </div>
-    <div id="tbl-area"></div>`;
-  setMain(filtersHTML);
-}
-
-/* ── Table ────────────────────────────────────────────────────────────── */
-function renderTable() {
-  const tblArea = document.getElementById('tbl-area');
-  if (!tblArea) return;
-
-  const visible = filteredRows();
-
-  if (!visible.length) {
-    tblArea.innerHTML = '<div class="state">No matching requests.</div>';
+  const container = document.getElementById('cards-'+section);
+  if (visible.length === 0) {
+    container.innerHTML = '<div class="empty-state">No requests in this category.</div>';
     return;
   }
-
-  const trs = visible.map(r => {
-    const id     = r.rowId;
-    const ch     = changes[id] || {};
-    const dec    = r.cells['Agency Request Committee Decision'] || '';
-    const cmt    = r.cells['Agency Request Committee Comments'] || '';
-    const curDec = ch.decision !== undefined ? ch.decision : dec;
-    const curCmt = ch.comment  !== undefined ? ch.comment  : cmt;
-    const dirty  = ch.decision !== undefined || ch.comment !== undefined;
-    const st     = ch.status;
-    const dis    = st === 'saving' ? 'disabled' : '';
-
-    let sc = 'btn btn-save', sl = 'Save';
-    if (st === 'saving') { sc += ' saving'; sl = 'Saving…'; }
-    else if (st === 'saved') { sc += ' saved'; sl = '✓ Saved'; }
-    else if (st === 'error') { sc += ' err';   sl = 'Retry'; }
-
-    const noSave = !dirty && !dec ? 'disabled' : '';
-
-    const opt = v => `<option value="${v}" ${curDec===v?'selected':''}>${v||'-- Select --'}</option>`;
-
-    return `<tr>
-      <td style="width:115px">
-        <div class="id-cell">${cv(r,'Request ID#')}</div>
-        <div class="dim">${fmtDate(r.createdAt)}</div>
-      </td>
-      <td style="width:135px">
-        <span class="ell" title="${cv(r,'Requestor Name:','Requestor Name')}">${cv(r,'Requestor Name:','Requestor Name')}</span>
-      </td>
-      <td style="width:160px">
-        <span class="ell" title="${cv(r,'Job Position/Title')}">${cv(r,'Job Position/Title')}</span>
-        <span class="dim ell">${cv(r,'Department')}</span>
-      </td>
-      <td style="width:68px;text-align:right">${cv(r,'Hourly Rate:','Hourly Rate')}</td>
-      <td style="width:165px">
-        <select class="sel" onchange="onDec('${id}',this.value)" ${dis}>
-          ${opt('')}
-          ${opt('Approved')}
-          ${opt('Declined')}
-          ${opt('Needs to Consult with BHR')}
-        </select>
-      </td>
-      <td style="width:180px">
-        <textarea class="txa" rows="2" placeholder="Add comments…"
-          onchange="onCmt('${id}',this.value)" ${dis}>${curCmt}</textarea>
-      </td>
-      <td style="width:82px;text-align:center">
-        <button class="${sc}" onclick="saveRow('${id}')" ${dis||noSave}>${sl}</button>
-        <button class="btn-detail" onclick="showDetail('${id}')">Details</button>
-      </td>
-    </tr>`;
-  }).join('');
-
-  tblArea.innerHTML = `
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th>Request / Date</th><th>Requestor</th><th>Position / Dept</th>
-          <th style="text-align:right">Rate</th>
-          <th>ARC Decision</th><th>Comments</th>
-          <th style="text-align:center">Action</th>
-        </tr></thead>
-        <tbody>${trs}</tbody>
-      </table>
-    </div>`;
+  container.innerHTML = visible.map(row =>
+    section==='initial' ? renderInitialCard(row, st) : renderExtCard(row, st)
+  ).join('');
 }
 
-/* ── Detail modal ─────────────────────────────────────────────────────── */
-function showDetail(rowId) {
-  const r = rows.find(x => x.rowId === rowId);
-  if (!r) return;
-  const c = r.cells;
+function optionsHtml(current) {
+  return ['', ...COMMITTEE_OPTIONS].map(o =>
+    `<option value="${esc(o)}" ${current===o?'selected':''}>${o||'— Select decision —'}</option>`
+  ).join('');
+}
 
-  const fields = [
-    ['Request ID',              c['Request ID#']],
-    ['Requestor',               c['Requestor Name:'] || c['Requestor Name']],
-    ['Job Position / Title',    c['Job Position/Title']],
-    ['Job Code',                c['Job Code:'] || c['Job Code']],
-    ['PID #',                   c['PID#:'] || c['PID#']],
-    ['Department',              c['Department']],
-    ['Staffing Category',       c['Staffing Category']],
-    ['Work Location',           c['Work Location']],
-    ['Work Days',               c['Work Days:'] || c['Work Days']],
-    ['Shift Time',              c['Shift Time']],
-    ['Hours / Day',             c['Number of Hours per Day:'] || c['Number of Hours per Day']],
-    ['Duration (months)',       c['Estimated Employment Duration (Months)']],
-    ['Budgeted Vacancies',      c['#Budgeted Vacancies for the Same Job Position']],
-    ['Current Agency Staff',    c['#Current Agency Staffing in Same Job Position']],
-    ['Union Role?',             c['Is This a Union Role?']],
-    ['Union Group',             c['Union Group']],
-    ['Hourly Rate',             c['Hourly Rate:'] || c['Hourly Rate']],
-    ['Office / Program',        c['Office and Program Number']],
-    ['Account to Charge',       c['Account to be Charged:'] || c['Account to be Charged']],
-    ['RTH Submitted?',          c['Is RTH Submitted for Vacancy?']],
-    ['Recruitment Phase',       c['Please Indicate the Recruitment Phase']],
-    ['Overtime Offered?',       c['Is Overtime Offered to Current Staff']],
-    ['Monthly OT Utilization',  c['Monthly Overtime Utilization']],
-  ].filter(([, v]) => v);
+function renderInitialCard(row, st) {
+  const c     = row.cells;
+  const d     = st.decisions[row.id] || {};
+  const saved = st.saved.has(row.id);
+  const hasD  = !!d.decision;
 
-  const just   = c['Justification For Using Temporary Labor'] || '';
-  const arcDec = c['Agency Request Committee Decision'] || '';
-  const arcCmt = c['Agency Request Committee Comments'] || '';
+  const reqId    = s(c, ARC.REQ_ID);
+  const requestor= s(c, ARC.REQUESTOR);
+  const title    = s(c, ARC.JOB_TITLE);
+  const dept     = s(c, ARC.DEPT);
+  const location = s(c, ARC.LOCATION);
+  const category = s(c, ARC.CATEGORY);
+  const shift    = s(c, ARC.SHIFT);
+  const hours    = s(c, ARC.HOURS);
+  const workdays = s(c, ARC.WORKDAYS);
+  const duration = s(c, ARC.DURATION);
+  const rate     = s(c, ARC.RATE);
+  const union    = s(c, ARC.UNION);
+  const unionGrp = s(c, ARC.UNION_GRP);
+  const rth      = s(c, ARC.RTH);
+  const posted   = s(c, ARC.POSTED);
+  const phase    = s(c, ARC.PHASE);
+  const vacancies= s(c, ARC.VACANCIES);
+  const curAgy   = s(c, ARC.CURRENT_AGY);
+  const overtime = s(c, ARC.OVERTIME);
+  const justif   = s(c, ARC.JUSTIF);
+  const pid      = s(c, ARC.PID);
 
-  document.getElementById('modal-root').innerHTML = `
-    <div class="overlay" onclick="if(event.target===this)closeModal()">
-      <div class="modal">
-        <div class="modal-hdr">
-          <h2>${c['Request ID#'] || 'Request Details'}</h2>
-          <button class="modal-close" onclick="closeModal()">×</button>
-        </div>
-        <div class="grid2">
-          ${fields.map(([l,v]) => `<div><div class="fld-lbl">${l}</div><div class="fld-val">${v}</div></div>`).join('')}
-        </div>
-        ${just ? `<div style="margin-top:.75rem"><div class="fld-lbl">Justification for temporary labor</div>
-          <div class="fld-long">${just.replace(/\n/g,'<br>')}</div></div>` : ''}
-        ${arcDec ? `<div style="margin-top:.75rem"><div class="fld-lbl">ARC Decision</div><div>${badge(arcDec)}</div></div>` : ''}
-        ${arcCmt ? `<div style="margin-top:.5rem"><div class="fld-lbl">ARC Comments</div><div class="fld-long">${arcCmt}</div></div>` : ''}
+  const btnClass = saved ? 'saved' : '';
+  const btnLabel = saved ? '✓ Saved' : 'Save to Smartsheet';
+
+  return `<div class="card${hasD?' decided':''}" id="card-${row.id}">
+  <div class="card-header" onclick="toggleCard('${row.id}')">
+    <div class="card-header-left">
+      <span class="req-id">${esc(reqId)}</span>
+      <div style="min-width:0">
+        <div class="req-title">${esc(title||'—')}</div>
+        <div class="req-meta">${esc(requestor)} · ${esc(dept)} · ${esc(location)}</div>
       </div>
-    </div>`;
+    </div>
+    <div class="header-right">
+      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.id}">${esc(badgeLabel(d.decision))}</span>
+      <svg class="chevron" id="chev-${row.id}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
+    </div>
+  </div>
+  <div class="card-body hidden" id="body-${row.id}">
+    <div class="details-grid">
+      <div class="dg-field"><label>Requestor</label><span>${esc(requestor||'—')}</span></div>
+      <div class="dg-field"><label>Category</label><span>${esc(category||'—')}</span></div>
+      <div class="dg-field"><label>Department</label><span>${esc(dept||'—')}</span></div>
+      <div class="dg-field"><label>Work location</label><span>${esc(location||'—')}</span></div>
+      <div class="dg-field"><label>PID #</label><span>${esc(pid||'—')}</span></div>
+      <div class="dg-field"><label>Shift</label><span>${esc(shift||'—')}</span></div>
+      <div class="dg-field"><label>Work days</label><span>${esc(workdays||'—')}</span></div>
+      <div class="dg-field"><label>Hrs / day</label><span>${esc(hours||'—')}</span></div>
+      <div class="dg-field"><label>Duration (mo)</label><span>${esc(duration||'—')}</span></div>
+      <div class="dg-field"><label>Hourly rate</label><span>${rate?'$'+esc(rate):'—'}</span></div>
+      <div class="dg-field"><label>Union role</label><span>${esc(union||'—')}${unionGrp?' · '+esc(unionGrp):''}</span></div>
+      <div class="dg-field"><label>RTH submitted</label><span>${esc(rth||'—')}</span></div>
+      <div class="dg-field"><label>Position posted</label><span>${esc(posted||'—')}</span></div>
+      <div class="dg-field"><label>Recruitment phase</label><span>${esc(phase||'—')}</span></div>
+      <div class="dg-field"><label>Budgeted vacancies</label><span>${esc(vacancies||'—')}</span></div>
+      <div class="dg-field"><label>Current agency staff</label><span>${esc(curAgy||'—')}</span></div>
+      <div class="dg-field"><label>OT offered</label><span>${esc(overtime||'—')}</span></div>
+    </div>
+    ${justif ? `
+    <div class="justif-wrap">
+      <div class="justif-label">Justification for using temporary labor</div>
+      <div class="justif-box collapsed" id="jbox-${row.id}">${esc(justif).replace(/\n/g,'<br>')}</div>
+      <button class="expand-btn" id="jbtn-${row.id}" onclick="toggleJustif('${row.id}')">Show more</button>
+    </div>` : ''}
+    <div class="decision-row">
+      <div class="decision-field">
+        <label>Committee decision</label>
+        <select id="sel-${row.id}" onchange="onDecChange('initial','${row.id}',this.value)">
+          ${optionsHtml(d.decision||'')}
+        </select>
+      </div>
+      <div class="decision-field">
+        <label>Committee comments</label>
+        <textarea id="txt-${row.id}" placeholder="Optional notes…"
+          oninput="onCommentChange('initial','${row.id}',this.value)">${esc(d.comments||'')}</textarea>
+      </div>
+      <button class="save-btn ${btnClass}" id="btn-${row.id}"
+        onclick="saveRow('initial','${row.id}')">${btnLabel}</button>
+    </div>
+  </div>
+</div>`;
 }
 
-function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+function renderExtCard(row, st) {
+  const c     = row.cells;
+  const d     = st.decisions[row.id] || {};
+  const saved = st.saved.has(row.id);
+  const hasD  = !!d.decision;
 
-/* ── Boot ─────────────────────────────────────────────────────────────── */
-loadData();
+  const reqId   = s(c, EXT.REQ_ID);
+  const name    = s(c, EXT.NAME);
+  const dept    = s(c, EXT.DEPT);
+  const title   = s(c, EXT.TITLE);
+  const location= s(c, EXT.LOCATION);
+  const months  = s(c, EXT.MONTHS);
+  const recruit = s(c, EXT.RECRUIT);
+
+  const btnClass = saved ? 'saved' : '';
+  const btnLabel = saved ? '✓ Saved' : 'Save to Smartsheet';
+
+  return `<div class="card${hasD?' decided':''}" id="card-${row.id}">
+  <div class="card-header" onclick="toggleCard('${row.id}')">
+    <div class="card-header-left">
+      <span class="req-id">${esc(reqId)}</span>
+      <div style="min-width:0">
+        <div class="req-title">${esc(name||title||'—')}</div>
+        <div class="req-meta">${esc(title)} · ${esc(dept)} · ${esc(location)}${months?' · '+esc(months)+' mo ext.':''}</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.id}">${esc(badgeLabel(d.decision))}</span>
+      <svg class="chevron" id="chev-${row.id}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
+    </div>
+  </div>
+  <div class="card-body hidden" id="body-${row.id}">
+    <div class="details-grid">
+      <div class="dg-field"><label>Staff name</label><span>${esc(name||'—')}</span></div>
+      <div class="dg-field"><label>Department</label><span>${esc(dept||'—')}</span></div>
+      <div class="dg-field"><label>Job title</label><span>${esc(title||'—')}</span></div>
+      <div class="dg-field"><label>Work location</label><span>${esc(location||'—')}</span></div>
+      <div class="dg-field"><label>Extension (months)</label><span>${esc(months||'—')}</span></div>
+      <div class="dg-field"><label>Recruitment status</label><span>${esc(recruit||'—')}</span></div>
+    </div>
+    <div class="decision-row">
+      <div class="decision-field">
+        <label>Committee decision</label>
+        <select id="sel-${row.id}" onchange="onDecChange('extension','${row.id}',this.value)">
+          ${optionsHtml(d.decision||'')}
+        </select>
+      </div>
+      <div class="decision-field">
+        <label>Committee comments</label>
+        <textarea id="txt-${row.id}" placeholder="Optional notes…"
+          oninput="onCommentChange('extension','${row.id}',this.value)">${esc(d.comments||'')}</textarea>
+      </div>
+      <button class="save-btn ${btnClass}" id="btn-${row.id}"
+        onclick="saveRow('extension','${row.id}')">${btnLabel}</button>
+    </div>
+  </div>
+</div>`;
+}
+
+// ── INTERACTIONS ─────────────────────────────────────────────
+function toggleCard(rowId) {
+  document.getElementById('body-'+rowId).classList.toggle('hidden');
+  document.getElementById('chev-'+rowId).classList.toggle('open');
+}
+
+function toggleJustif(rowId) {
+  const box  = document.getElementById('jbox-'+rowId);
+  const btn  = document.getElementById('jbtn-'+rowId);
+  const isEx = box.classList.contains('expanded');
+  box.classList.toggle('expanded', !isEx);
+  box.classList.toggle('collapsed', isEx);
+  btn.textContent = isEx ? 'Show more' : 'Show less';
+}
+
+function onDecChange(section, rowId, value) {
+  state[section].decisions[rowId] = state[section].decisions[rowId] || {};
+  state[section].decisions[rowId].decision = value;
+  state[section].saved.delete(rowId);
+  const badge = document.getElementById('badge-'+rowId);
+  if (badge) { badge.className='badge '+badgeClass(value); badge.textContent=badgeLabel(value); }
+  const card = document.getElementById('card-'+rowId);
+  if (card) { value ? card.classList.add('decided') : card.classList.remove('decided'); }
+  const btn = document.getElementById('btn-'+rowId);
+  if (btn && !btn.classList.contains('saving')) {
+    btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false;
+  }
+  updateStats();
+  updateBulkBar(section);
+}
+
+function onCommentChange(section, rowId, value) {
+  state[section].decisions[rowId] = state[section].decisions[rowId] || {};
+  state[section].decisions[rowId].comments = value;
+  state[section].saved.delete(rowId);
+  const btn = document.getElementById('btn-'+rowId);
+  if (btn && !btn.classList.contains('saving')) {
+    btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false;
+  }
+}
+
+// ── API ──────────────────────────────────────────────────────
+async function callClaude(system, user, maxTokens=1000) {
+  const resp = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: MODEL, max_tokens: maxTokens,
+      mcp_servers: [{ type:'url', url:MCP_URL, name:'smartsheet-mcp' }],
+      system, messages: [{ role:'user', content: user }]
+    })
+  });
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message || 'API error');
+  return data;
+}
+
+async function loadSection(section) {
+  const reportId  = section==='initial' ? ARC_REPORT_ID : EXT_REPORT_ID;
+  const container = document.getElementById('cards-'+section);
+  container.innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading from Smartsheet…</div>';
+
+  try {
+    const data = await callClaude(
+      `You are a Smartsheet data retrieval assistant. Use the get_report MCP tool to fetch report ID ${reportId} with page_size=200. ` +
+      `Return ONLY a valid JSON array of rows. Each element must have: ` +
+      `"id" (row id as number), "sheet_id" (number), and "cells" (array of objects each with ` +
+      `"virtual_column_id" as number, "display_value" as string or null, "value" as string or null, "column_id" as number). ` +
+      `No markdown, no code fences, no explanation — raw JSON array only.`,
+      `Fetch report ${reportId} and return all rows as a JSON array now.`,
+      12000
+    );
+
+    const rawText = (data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+    const match   = rawText.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('No JSON array found in response');
+    const rows = JSON.parse(match[0]);
+
+    state[section].rows = rows;
+    const decVcid = section==='initial' ? ARC.DECISION : EXT.DECISION;
+    const comVcid = section==='initial' ? ARC.COMMENTS : EXT.COMMENTS;
+
+    rows.forEach(row => {
+      const existDec = s(row.cells, decVcid);
+      const existCom = s(row.cells, comVcid);
+      state[section].decisions[row.id] = { decision: existDec, comments: existCom };
+      if (existDec) state[section].saved.add(row.id);
+    });
+
+    renderSection(section);
+    updateStats();
+  } catch(err) {
+    container.innerHTML = `<div class="error-state">Failed to load: ${esc(err.message)}<br>
+      <button class="btn" style="margin-top:14px" onclick="loadSection('${section}')">Retry</button></div>`;
+    console.error('loadSection error:', err);
+  }
+}
+
+async function saveRow(section, rowId) {
+  const st  = state[section];
+  const dec = st.decisions[rowId] || {};
+  const btn = document.getElementById('btn-'+rowId);
+
+  if (!dec.decision) { showToast('Please select a decision first.','err'); return; }
+  if (st.saved.has(rowId)) { showToast('Already saved to Smartsheet.'); return; }
+
+  const sheetId  = section==='initial' ? INITIAL_SHEET_ID : EXTENSION_SHEET_ID;
+  const decVcid  = section==='initial' ? ARC.DECISION : EXT.DECISION;
+  const comVcid  = section==='initial' ? ARC.COMMENTS : EXT.COMMENTS;
+  const row      = st.rows.find(r => String(r.id)===String(rowId));
+  const decCell  = (row?.cells||[]).find(c => Number(c.virtual_column_id)===Number(decVcid));
+  const comCell  = (row?.cells||[]).find(c => Number(c.virtual_column_id)===Number(comVcid));
+  const decColId = decCell?.column_id;
+  const comColId = comCell?.column_id;
+
+  btn.disabled=true; btn.className='save-btn saving'; btn.textContent='Saving…';
+
+  try {
+    await callClaude(
+      'You are a Smartsheet assistant. Use the update_rows MCP tool to update the row as instructed. Respond only with OK if successful, or ERROR: reason if not.',
+      `Update sheet ${sheetId}, row ${rowId}. ` +
+      `Set column_id ${decColId} to value "${dec.decision}". ` +
+      (dec.comments ? `Set column_id ${comColId} to value "${dec.comments}". ` : '') +
+      `Call update_rows now.`
+    );
+    btn.className='save-btn saved'; btn.textContent='✓ Saved'; btn.disabled=false;
+    st.saved.add(rowId);
+    updateStats();
+    updateBulkBar(section);
+    showToast('Decision saved to Smartsheet.','ok');
+  } catch(err) {
+    btn.className='save-btn error'; btn.textContent='Error — retry'; btn.disabled=false;
+    showToast('Save failed: '+err.message,'err');
+    console.error('saveRow error:', err);
+  }
+}
+
+async function saveSection(section) {
+  const st = state[section];
+  const toSave = st.rows.filter(r => (st.decisions[r.id]||{}).decision && !st.saved.has(r.id));
+  if (toSave.length===0) { showToast('Nothing new to save.'); return; }
+  showToast(`Saving ${toSave.length} decision(s)…`);
+  for (const row of toSave) {
+    await saveRow(section, String(row.id));
+    await new Promise(r=>setTimeout(r, 350));
+  }
+}
+
+async function submitAllPending() {
+  await saveSection('initial');
+  await saveSection('extension');
+}
+
+async function refreshAll() {
+  state.initial   = { rows:[], filter:state.initial.filter,   decisions:{}, saved:new Set() };
+  state.extension = { rows:[], filter:state.extension.filter, decisions:{}, saved:new Set() };
+  await Promise.all([loadSection('initial'), loadSection('extension')]);
+  showToast('Refreshed from Smartsheet.','ok');
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+loadSection('initial');
+loadSection('extension');
 </script>
 </body>
 </html>
