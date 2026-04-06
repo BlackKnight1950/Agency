@@ -27,16 +27,14 @@
     --red-text:    #991B1B;
     --purple-bg:   #F3F0FF;
     --purple-text: #4C1D95;
-    --radius-sm:   6px;
-    --radius:      10px;
-    --radius-lg:   14px;
-    --shadow:      0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-md:   0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+    --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
+    --shadow:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
   }
   html { font-size: 15px; }
   body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
 
-  /* Header */
+  /* ── Header ── */
   .app-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 58px; }
   .brand { display: flex; align-items: center; gap: 10px; }
   .brand-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); display: flex; align-items: center; justify-content: center; }
@@ -45,26 +43,27 @@
   .brand-sub  { font-size: 12px; color: var(--muted); margin-top: -1px; }
   .header-actions { display: flex; align-items: center; gap: 10px; }
 
-  /* Buttons */
+  /* ── Buttons ── */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: all .15s; white-space: nowrap; }
   .btn:hover { background: var(--bg); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
   .btn-primary { background: var(--blue); border-color: var(--blue); color: white; }
-  .btn-primary:hover { background: var(--blue-text); border-color: var(--blue-text); }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-text); border-color: var(--blue-text); }
   .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-  /* Layout */
+  /* ── Layout ── */
   .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* Stats bar */
+  /* ── Stats ── */
   .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 2rem; }
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
   .s-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
   .s-value { font-size: 26px; font-weight: 600; letter-spacing: -.02em; color: var(--text); }
   .stat-card.s-pending .s-value { color: var(--amber-text); }
   .stat-card.s-done    .s-value { color: var(--green-text); }
-  .s-time { font-size: 13px !important; font-weight: 500 !important; color: var(--muted) !important; letter-spacing: 0 !important; }
+  #stat-time { font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
 
-  /* Tabs */
+  /* ── Tabs ── */
   .section-nav { display: flex; gap: 4px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
   .nav-tab { padding: 9px 18px; font-size: 13px; font-weight: 500; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; border-radius: var(--radius-sm) var(--radius-sm) 0 0; display: flex; align-items: center; gap: 6px; }
   .nav-tab:hover { color: var(--text); background: var(--bg); }
@@ -72,11 +71,11 @@
   .tab-count { display: inline-flex; align-items: center; justify-content: center; background: var(--blue-bg); color: var(--blue-text); border-radius: 20px; font-size: 11px; font-weight: 600; min-width: 20px; height: 18px; padding: 0 6px; }
   .nav-tab.active .tab-count { background: var(--blue); color: white; }
 
-  /* Panels */
+  /* ── Panels ── */
   .section-panel { display: none; }
   .section-panel.active { display: block; }
 
-  /* Filter row */
+  /* ── Filters ── */
   .filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap; }
   .filter-label { font-size: 12px; color: var(--muted); font-weight: 500; }
   .chip { padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 20px; border: 1px solid var(--border-md); background: var(--surface); color: var(--muted); cursor: pointer; transition: all .12s; }
@@ -85,11 +84,11 @@
   .spacer { flex: 1; }
   .result-count { font-size: 12px; color: var(--muted); }
 
-  /* Bulk bar */
+  /* ── Bulk bar ── */
   .bulk-bar { display: flex; align-items: center; justify-content: space-between; background: var(--blue-bg); border: 1px solid var(--blue); border-radius: var(--radius); padding: 10px 16px; margin-bottom: 14px; font-size: 13px; color: var(--blue-text); font-weight: 500; }
   .bulk-bar.hidden { display: none; }
 
-  /* Cards */
+  /* ── Cards ── */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden; transition: box-shadow .15s, border-color .15s; }
   .card:hover { box-shadow: var(--shadow-md); border-color: var(--border-md); }
   .card.decided { border-left: 3px solid var(--green); }
@@ -99,38 +98,42 @@
   .req-title { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .req-meta  { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+  /* ── Badges ── */
   .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
   .badge-pending  { background: var(--amber-bg);  color: var(--amber-text); }
   .badge-approved { background: var(--green-bg);  color: var(--green-text); }
   .badge-declined { background: var(--red-bg);    color: var(--red-text);   }
   .badge-hold     { background: var(--blue-bg);   color: var(--blue-text);  }
   .badge-consult  { background: var(--purple-bg); color: var(--purple-text);}
+
   .chevron { color: var(--subtle); transition: transform .2s; }
   .chevron.open { transform: rotate(180deg); }
 
   .card-body { padding: 0 18px 16px; border-top: 1px solid var(--border); }
   .card-body.hidden { display: none; }
 
-  /* Detail grid */
+  /* ── Detail grid ── */
   .details-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(175px,1fr)); gap: 10px 20px; padding: 14px 0 12px; }
   .dg-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); display: block; margin-bottom: 2px; }
   .dg-field span  { font-size: 13px; color: var(--text); line-height: 1.4; }
 
-  /* Justification */
+  /* ── Justification ── */
   .justif-wrap { margin-bottom: 14px; }
-  .justif-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); margin-bottom: 5px; }
+  .justif-lbl { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--subtle); margin-bottom: 5px; }
   .justif-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: var(--muted); line-height: 1.65; max-height: 110px; overflow: hidden; position: relative; }
   .justif-box.expanded { max-height: none; }
   .justif-box.collapsed::after { content:''; position:absolute; bottom:0; left:0; right:0; height:32px; background:linear-gradient(transparent,var(--bg)); pointer-events:none; }
   .expand-btn { font-size:11px; color:var(--blue); cursor:pointer; background:none; border:none; padding:4px 0 0; display:block; }
   .expand-btn:hover { text-decoration:underline; }
 
-  /* Decision row */
+  /* ── Decision row ── */
   .decision-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; border-top: 1px solid var(--border); padding-top: 12px; }
-  .decision-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 5px; }
-  .decision-field select, .decision-field textarea { width: 100%; font-size: 13px; font-family: inherit; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: border-color .12s; }
-  .decision-field select:focus, .decision-field textarea:focus { outline: none; border-color: var(--blue); }
-  .decision-field textarea { resize: vertical; min-height: 62px; }
+  .dec-field label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 5px; }
+  .dec-field select, .dec-field textarea { width: 100%; font-size: 13px; font-family: inherit; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-md); background: var(--surface); color: var(--text); transition: border-color .12s; }
+  .dec-field select:focus, .dec-field textarea:focus { outline: none; border-color: var(--blue); }
+  .dec-field textarea { resize: vertical; min-height: 62px; }
+
   .save-btn { padding: 9px 18px; font-size: 13px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--blue); background: var(--blue); color: white; cursor: pointer; transition: all .15s; white-space: nowrap; align-self: end; }
   .save-btn:hover:not(:disabled) { background: var(--blue-text); border-color: var(--blue-text); }
   .save-btn:disabled { opacity:.5; cursor:not-allowed; }
@@ -138,20 +141,20 @@
   .save-btn.saved  { background:var(--green); border-color:var(--green); }
   .save-btn.error  { background:var(--red);   border-color:var(--red); }
 
-  /* States */
+  /* ── States ── */
   .loading-state { text-align:center; padding:4rem 2rem; color:var(--muted); font-size:14px; display:flex; flex-direction:column; align-items:center; gap:14px; }
   .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; }
   @keyframes spin { to { transform:rotate(360deg); } }
   .empty-state { text-align:center; padding:3rem 2rem; color:var(--muted); font-size:14px; }
   .error-state  { text-align:center; padding:3rem 2rem; color:var(--red-text); font-size:14px; }
 
-  /* Toast */
+  /* ── Toast ── */
   #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--text); color:white; padding:10px 20px; border-radius:var(--radius); font-size:13px; font-weight:500; box-shadow:var(--shadow-md); transition:transform .25s cubic-bezier(.34,1.56,.64,1); z-index:999; pointer-events:none; white-space:nowrap; }
   #toast.show { transform:translateX(-50%) translateY(0); }
   #toast.ok   { background:var(--green); }
   #toast.err  { background:var(--red); }
 
-  /* Responsive */
+  /* ── Responsive ── */
   @media (max-width:680px) {
     .stats-bar { grid-template-columns:repeat(2,1fr); }
     .decision-row { grid-template-columns:1fr; }
@@ -175,7 +178,7 @@
     </div>
   </div>
   <div class="header-actions">
-    <button class="btn" onclick="refreshAll()">
+    <button class="btn" id="refresh-btn" onclick="refreshAll()">
       <svg viewBox="0 0 20 20" fill="currentColor"><path d="M4.5 9A5.5 5.5 0 0115 6.2V4l3 3-3 3V8a4 4 0 10.9 5H17a5.5 5.5 0 01-12.5-4z"/></svg>
       <span>Refresh</span>
     </button>
@@ -191,7 +194,7 @@
     <div class="stat-card"><div class="s-label">Total requests</div><div class="s-value" id="stat-total">—</div></div>
     <div class="stat-card s-pending"><div class="s-label">Pending decision</div><div class="s-value" id="stat-pending">—</div></div>
     <div class="stat-card s-done"><div class="s-label">Decisions saved</div><div class="s-value" id="stat-saved">—</div></div>
-    <div class="stat-card"><div class="s-label">Last refreshed</div><div class="s-value s-time" id="stat-time">—</div></div>
+    <div class="stat-card"><div class="s-label">Last refreshed</div><div class="s-value" id="stat-time">—</div></div>
   </div>
 
   <div class="section-nav">
@@ -203,6 +206,7 @@
     </button>
   </div>
 
+  <!-- Initial -->
   <div class="section-panel active" id="panel-initial">
     <div class="filter-row">
       <span class="filter-label">Filter:</span>
@@ -221,6 +225,7 @@
     </div>
   </div>
 
+  <!-- Extension -->
   <div class="section-panel" id="panel-extension">
     <div class="filter-row">
       <span class="filter-label">Filter:</span>
@@ -242,61 +247,55 @@
 <div id="toast"></div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────
-const API_URL = 'https://api.anthropic.com/v1/messages';
-const MCP_URL = 'https://mcp.smartsheet.com';
-const MODEL   = 'claude-sonnet-4-20250514';
+// ── REPORT / COLUMN CONFIG ───────────────────────────────────
+// The server normalizes rows to { rowId, sheetId, cells: { "Column Title": value }, colIds: { "Column Title": actualColumnId } }
+// We reference cells by exact column title strings from the Smartsheet report.
 
-// Report IDs
-const ARC_REPORT_ID = 7288028541177732;  // ARC Meeting Review Log  (Initial)
-const EXT_REPORT_ID = 1835552375525252;  // Pending Requests for Extension
-
-// Source sheet IDs (for writes)
-const INITIAL_SHEET_ID   = 4795627573563268;
-const EXTENSION_SHEET_ID = 4073630020358020;
-
-// ARC Meeting Review Log — virtual column IDs
-const ARC = {
-  REQ_ID:     7605966703644548,
-  REQUESTOR:  6480066796801924,
-  JOB_TITLE:  146879820812164,
-  JOB_CODE:   4650479448182660,
-  PID:        8591129122131844,
-  RTH:        4931954424893316,
-  PHASE:      1554254704365444,
-  JUSTIF:     8028179168710532,
-  DECISION:   6057854331735940,
-  COMMENTS:   3806054518050692,
-  DEPT:       183945589903236,
-  CATEGORY:   8731866610487172,
-  LOCATION:   2398679634497412,
-  WORKDAYS:   6902279261867908,
-  SHIFT:      1272779727654788,
-  HOURS:      5776379355025284,
-  DURATION:   3524579541340036,
-  VACANCIES:  709829774233476,
-  CURRENT_AGY:5213429401603972,
-  UNION:      2961629587918724,
-  UNION_GRP:  7465229215289220,
-  RATE:       1835729681076100,
-  OFFICE:     6339329308446596,
-  ACCOUNT:    4087529494761348,
-  OVERTIME:   428354797522820,
-  POSTED:     2680154611208068,
-  OT_UTIL:    7183754238578564,
+const REPORTS = {
+  initial:   '7288028541177732',   // ARC Meeting Review Log
+  extension: '1835552375525252',   // Pending Requests for Extension
 };
 
-// Pending Requests for Extension — virtual column IDs
-const EXT = {
-  REQ_ID:   3416718167461764,
-  NAME:     1986256156970884,
-  DEPT:     3015893458833284,
-  TITLE:    7519493086203780,
-  LOCATION: 6393593179361156,
-  MONTHS:   1518584879337348,
-  RECRUIT:  7935691016408964,
-  DECISION: 3150034705796996,
-  COMMENTS: 7653634333167492,
+// Column title strings as they appear in each report
+// (server maps virtualId → title for us)
+const COL = {
+  initial: {
+    REQ_ID:      'Request ID#',
+    REQUESTOR:   'Requestor Name:',
+    JOB_TITLE:   'Job Position/Title',
+    JOB_CODE:    'Job Code:',
+    PID:         'PID#:',
+    DEPT:        'Department',
+    CATEGORY:    'Staffing Category',
+    LOCATION:    'Work Location',
+    WORKDAYS:    'Work Days:',
+    SHIFT:       'Shift Time',
+    HOURS:       'Number of Hours per Day:',
+    DURATION:    'Estimated Employment Duration (Months)',
+    RATE:        'Hourly Rate:',
+    UNION:       'Is This a Union Role?',
+    UNION_GRP:   'Union Group',
+    RTH:         'Is RTH Submitted for Vacancy?',
+    POSTED:      'Is Position Posted?',
+    PHASE:       'Please Indicate the Recruitment Phase',
+    VACANCIES:   '#Budgeted Vacancies for the Same Job Position',
+    CURRENT_AGY: '#Current Agency Staffing in Same Job Position',
+    OVERTIME:    'Is Overtime Offered to Current Staff',
+    JUSTIF:      'Justification For Using Temporary Labor',
+    DECISION:    'Agency Request Committee Decision',
+    COMMENTS:    'Agency Request Committee Comments',
+  },
+  extension: {
+    REQ_ID:   'Request ID',          // actual title from extension report
+    NAME:     'Agency Staff Name',
+    DEPT:     'Department',
+    TITLE:    'Job Position/Title',
+    LOCATION: 'Work Location',
+    MONTHS:   'Request To Extend Employment Duration (Months)',
+    RECRUIT:  'Recruitment Status',
+    DECISION: 'Agency Request Committee Decision',
+    COMMENTS: 'Agency Request Committee Comments',
+  }
 };
 
 const COMMITTEE_OPTIONS = ['Approved','Declined','Needs to Consult with BHR','Hold'];
@@ -308,11 +307,7 @@ const state = {
 };
 
 // ── HELPERS ──────────────────────────────────────────────────
-function cv(cells, vcid) {
-  const c = cells.find(x => Number(x.virtual_column_id) === Number(vcid));
-  return c ? (c.display_value || c.value || '') : '';
-}
-function s(cells, vcid) { return String(cv(cells, vcid) || '').trim(); }
+function g(cells, key) { return String(cells[key] || '').trim(); }
 
 function badgeClass(d) {
   if (!d) return 'badge-pending';
@@ -324,26 +319,22 @@ function badgeClass(d) {
 }
 function badgeLabel(d) { return d || 'Pending'; }
 
-function esc(str) {
-  return String(str||'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(v) {
+  return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = type ? `show ${type}` : 'show';
-  clearTimeout(t._t);
-  t._t = setTimeout(() => { t.className = ''; }, 3200);
+  t.textContent = msg; t.className = type ? `show ${type}` : 'show';
+  clearTimeout(t._t); t._t = setTimeout(()=>{ t.className=''; }, 3200);
 }
 
 function updateStats() {
   let total=0, pending=0, saved=0;
-  ['initial','extension'].forEach(sec => {
+  ['initial','extension'].forEach(sec=>{
     const st = state[sec];
     total   += st.rows.length;
-    pending += st.rows.filter(r => !(st.decisions[r.id]||{}).decision).length;
+    pending += st.rows.filter(r=>!(st.decisions[r.rowId]||{}).decision).length;
     saved   += st.saved.size;
   });
   document.getElementById('stat-total').textContent   = total   || '—';
@@ -357,205 +348,166 @@ function updateStats() {
 
 function updateBulkBar(section) {
   const st = state[section];
-  const n  = st.rows.filter(r => (st.decisions[r.id]||{}).decision && !st.saved.has(r.id)).length;
+  const n  = st.rows.filter(r=>(st.decisions[r.rowId]||{}).decision && !st.saved.has(r.rowId)).length;
   const bar = document.getElementById('bulk-'+section);
   if (n > 0) {
     bar.classList.remove('hidden');
-    document.getElementById('bulk-msg-'+section).textContent =
-      n + ' decision' + (n!==1?'s':'') + ' ready to save';
-  } else {
-    bar.classList.add('hidden');
-  }
+    document.getElementById('bulk-msg-'+section).textContent = n+' decision'+(n!==1?'s':'')+' ready to save';
+  } else { bar.classList.add('hidden'); }
 }
 
 // ── NAVIGATION ───────────────────────────────────────────────
 function switchTab(section, btn) {
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-'+section).classList.add('active');
 }
 
 function setFilter(section, f, btn) {
   state[section].filter = f;
-  btn.closest('.filter-row').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.closest('.filter-row').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   renderSection(section);
 }
 
 // ── RENDER ───────────────────────────────────────────────────
 function renderSection(section) {
-  const st      = state[section];
-  const visible = st.rows.filter(r => {
-    const d = (st.decisions[r.id]||{}).decision||'';
+  const st = state[section];
+  const visible = st.rows.filter(r=>{
+    const d = (st.decisions[r.rowId]||{}).decision||'';
     if (st.filter==='pending') return !d;
     if (st.filter==='decided') return !!d;
     return true;
   });
   document.getElementById('count-'+section).textContent =
-    visible.length + ' request' + (visible.length!==1?'s':'');
+    visible.length+' request'+(visible.length!==1?'s':'');
   updateBulkBar(section);
 
   const container = document.getElementById('cards-'+section);
-  if (visible.length === 0) {
-    container.innerHTML = '<div class="empty-state">No requests in this category.</div>';
+  if (!visible.length) {
+    container.innerHTML='<div class="empty-state">No requests in this category.</div>';
     return;
   }
-  container.innerHTML = visible.map(row =>
-    section==='initial' ? renderInitialCard(row, st) : renderExtCard(row, st)
+  container.innerHTML = visible.map(row=>
+    section==='initial' ? renderInitialCard(row,st) : renderExtCard(row,st)
   ).join('');
 }
 
-function optionsHtml(current) {
-  return ['', ...COMMITTEE_OPTIONS].map(o =>
+function optHtml(current) {
+  return ['', ...COMMITTEE_OPTIONS].map(o=>
     `<option value="${esc(o)}" ${current===o?'selected':''}>${o||'— Select decision —'}</option>`
   ).join('');
 }
 
 function renderInitialCard(row, st) {
-  const c     = row.cells;
-  const d     = st.decisions[row.id] || {};
-  const saved = st.saved.has(row.id);
+  const c = row.cells; const col = COL.initial;
+  const d = st.decisions[row.rowId]||{};
+  const saved = st.saved.has(row.rowId);
   const hasD  = !!d.decision;
+  const justif = g(c, col.JUSTIF);
+  const union  = g(c, col.UNION);
+  const unionGrp = g(c, col.UNION_GRP);
+  const rate   = g(c, col.RATE);
 
-  const reqId    = s(c, ARC.REQ_ID);
-  const requestor= s(c, ARC.REQUESTOR);
-  const title    = s(c, ARC.JOB_TITLE);
-  const dept     = s(c, ARC.DEPT);
-  const location = s(c, ARC.LOCATION);
-  const category = s(c, ARC.CATEGORY);
-  const shift    = s(c, ARC.SHIFT);
-  const hours    = s(c, ARC.HOURS);
-  const workdays = s(c, ARC.WORKDAYS);
-  const duration = s(c, ARC.DURATION);
-  const rate     = s(c, ARC.RATE);
-  const union    = s(c, ARC.UNION);
-  const unionGrp = s(c, ARC.UNION_GRP);
-  const rth      = s(c, ARC.RTH);
-  const posted   = s(c, ARC.POSTED);
-  const phase    = s(c, ARC.PHASE);
-  const vacancies= s(c, ARC.VACANCIES);
-  const curAgy   = s(c, ARC.CURRENT_AGY);
-  const overtime = s(c, ARC.OVERTIME);
-  const justif   = s(c, ARC.JUSTIF);
-  const pid      = s(c, ARC.PID);
-
-  const btnClass = saved ? 'saved' : '';
-  const btnLabel = saved ? '✓ Saved' : 'Save to Smartsheet';
-
-  return `<div class="card${hasD?' decided':''}" id="card-${row.id}">
-  <div class="card-header" onclick="toggleCard('${row.id}')">
+  return `<div class="card${hasD?' decided':''}" id="card-${row.rowId}">
+  <div class="card-header" onclick="toggleCard('${row.rowId}')">
     <div class="card-header-left">
-      <span class="req-id">${esc(reqId)}</span>
+      <span class="req-id">${esc(g(c,col.REQ_ID))}</span>
       <div style="min-width:0">
-        <div class="req-title">${esc(title||'—')}</div>
-        <div class="req-meta">${esc(requestor)} · ${esc(dept)} · ${esc(location)}</div>
+        <div class="req-title">${esc(g(c,col.JOB_TITLE)||'—')}</div>
+        <div class="req-meta">${esc(g(c,col.REQUESTOR))} · ${esc(g(c,col.DEPT))} · ${esc(g(c,col.LOCATION))}</div>
       </div>
     </div>
     <div class="header-right">
-      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.id}">${esc(badgeLabel(d.decision))}</span>
-      <svg class="chevron" id="chev-${row.id}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
+      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.rowId}">${esc(badgeLabel(d.decision))}</span>
+      <svg class="chevron" id="chev-${row.rowId}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
     </div>
   </div>
-  <div class="card-body hidden" id="body-${row.id}">
+  <div class="card-body hidden" id="body-${row.rowId}">
     <div class="details-grid">
-      <div class="dg-field"><label>Requestor</label><span>${esc(requestor||'—')}</span></div>
-      <div class="dg-field"><label>Category</label><span>${esc(category||'—')}</span></div>
-      <div class="dg-field"><label>Department</label><span>${esc(dept||'—')}</span></div>
-      <div class="dg-field"><label>Work location</label><span>${esc(location||'—')}</span></div>
-      <div class="dg-field"><label>PID #</label><span>${esc(pid||'—')}</span></div>
-      <div class="dg-field"><label>Shift</label><span>${esc(shift||'—')}</span></div>
-      <div class="dg-field"><label>Work days</label><span>${esc(workdays||'—')}</span></div>
-      <div class="dg-field"><label>Hrs / day</label><span>${esc(hours||'—')}</span></div>
-      <div class="dg-field"><label>Duration (mo)</label><span>${esc(duration||'—')}</span></div>
+      <div class="dg-field"><label>Requestor</label><span>${esc(g(c,col.REQUESTOR)||'—')}</span></div>
+      <div class="dg-field"><label>Category</label><span>${esc(g(c,col.CATEGORY)||'—')}</span></div>
+      <div class="dg-field"><label>Department</label><span>${esc(g(c,col.DEPT)||'—')}</span></div>
+      <div class="dg-field"><label>Work location</label><span>${esc(g(c,col.LOCATION)||'—')}</span></div>
+      <div class="dg-field"><label>PID #</label><span>${esc(g(c,col.PID)||'—')}</span></div>
+      <div class="dg-field"><label>Shift</label><span>${esc(g(c,col.SHIFT)||'—')}</span></div>
+      <div class="dg-field"><label>Work days</label><span>${esc(g(c,col.WORKDAYS)||'—')}</span></div>
+      <div class="dg-field"><label>Hrs / day</label><span>${esc(g(c,col.HOURS)||'—')}</span></div>
+      <div class="dg-field"><label>Duration (mo)</label><span>${esc(g(c,col.DURATION)||'—')}</span></div>
       <div class="dg-field"><label>Hourly rate</label><span>${rate?'$'+esc(rate):'—'}</span></div>
       <div class="dg-field"><label>Union role</label><span>${esc(union||'—')}${unionGrp?' · '+esc(unionGrp):''}</span></div>
-      <div class="dg-field"><label>RTH submitted</label><span>${esc(rth||'—')}</span></div>
-      <div class="dg-field"><label>Position posted</label><span>${esc(posted||'—')}</span></div>
-      <div class="dg-field"><label>Recruitment phase</label><span>${esc(phase||'—')}</span></div>
-      <div class="dg-field"><label>Budgeted vacancies</label><span>${esc(vacancies||'—')}</span></div>
-      <div class="dg-field"><label>Current agency staff</label><span>${esc(curAgy||'—')}</span></div>
-      <div class="dg-field"><label>OT offered</label><span>${esc(overtime||'—')}</span></div>
+      <div class="dg-field"><label>RTH submitted</label><span>${esc(g(c,col.RTH)||'—')}</span></div>
+      <div class="dg-field"><label>Position posted</label><span>${esc(g(c,col.POSTED)||'—')}</span></div>
+      <div class="dg-field"><label>Recruitment phase</label><span>${esc(g(c,col.PHASE)||'—')}</span></div>
+      <div class="dg-field"><label>Budgeted vacancies</label><span>${esc(g(c,col.VACANCIES)||'—')}</span></div>
+      <div class="dg-field"><label>Current agency staff</label><span>${esc(g(c,col.CURRENT_AGY)||'—')}</span></div>
+      <div class="dg-field"><label>OT offered</label><span>${esc(g(c,col.OVERTIME)||'—')}</span></div>
     </div>
-    ${justif ? `
-    <div class="justif-wrap">
-      <div class="justif-label">Justification for using temporary labor</div>
-      <div class="justif-box collapsed" id="jbox-${row.id}">${esc(justif).replace(/\n/g,'<br>')}</div>
-      <button class="expand-btn" id="jbtn-${row.id}" onclick="toggleJustif('${row.id}')">Show more</button>
-    </div>` : ''}
+    ${justif?`<div class="justif-wrap">
+      <div class="justif-lbl">Justification for using temporary labor</div>
+      <div class="justif-box collapsed" id="jbox-${row.rowId}">${esc(justif).replace(/\n/g,'<br>')}</div>
+      <button class="expand-btn" id="jbtn-${row.rowId}" onclick="toggleJustif('${row.rowId}')">Show more</button>
+    </div>`:''}
     <div class="decision-row">
-      <div class="decision-field">
+      <div class="dec-field">
         <label>Committee decision</label>
-        <select id="sel-${row.id}" onchange="onDecChange('initial','${row.id}',this.value)">
-          ${optionsHtml(d.decision||'')}
-        </select>
+        <select id="sel-${row.rowId}" onchange="onDecChange('initial','${row.rowId}',this.value)">${optHtml(d.decision||'')}</select>
       </div>
-      <div class="decision-field">
+      <div class="dec-field">
         <label>Committee comments</label>
-        <textarea id="txt-${row.id}" placeholder="Optional notes…"
-          oninput="onCommentChange('initial','${row.id}',this.value)">${esc(d.comments||'')}</textarea>
+        <textarea id="txt-${row.rowId}" placeholder="Optional notes…"
+          oninput="onCommentChange('initial','${row.rowId}',this.value)">${esc(d.comments||'')}</textarea>
       </div>
-      <button class="save-btn ${btnClass}" id="btn-${row.id}"
-        onclick="saveRow('initial','${row.id}')">${btnLabel}</button>
+      <button class="save-btn${saved?' saved':''}" id="btn-${row.rowId}"
+        onclick="saveRow('initial','${row.rowId}')">${saved?'✓ Saved':'Save to Smartsheet'}</button>
     </div>
   </div>
 </div>`;
 }
 
 function renderExtCard(row, st) {
-  const c     = row.cells;
-  const d     = st.decisions[row.id] || {};
-  const saved = st.saved.has(row.id);
+  const c = row.cells; const col = COL.extension;
+  const d = st.decisions[row.rowId]||{};
+  const saved = st.saved.has(row.rowId);
   const hasD  = !!d.decision;
+  const months = g(c, col.MONTHS);
 
-  const reqId   = s(c, EXT.REQ_ID);
-  const name    = s(c, EXT.NAME);
-  const dept    = s(c, EXT.DEPT);
-  const title   = s(c, EXT.TITLE);
-  const location= s(c, EXT.LOCATION);
-  const months  = s(c, EXT.MONTHS);
-  const recruit = s(c, EXT.RECRUIT);
-
-  const btnClass = saved ? 'saved' : '';
-  const btnLabel = saved ? '✓ Saved' : 'Save to Smartsheet';
-
-  return `<div class="card${hasD?' decided':''}" id="card-${row.id}">
-  <div class="card-header" onclick="toggleCard('${row.id}')">
+  return `<div class="card${hasD?' decided':''}" id="card-${row.rowId}">
+  <div class="card-header" onclick="toggleCard('${row.rowId}')">
     <div class="card-header-left">
-      <span class="req-id">${esc(reqId)}</span>
+      <span class="req-id">${esc(g(c,col.REQ_ID))}</span>
       <div style="min-width:0">
-        <div class="req-title">${esc(name||title||'—')}</div>
-        <div class="req-meta">${esc(title)} · ${esc(dept)} · ${esc(location)}${months?' · '+esc(months)+' mo ext.':''}</div>
+        <div class="req-title">${esc(g(c,col.NAME)||g(c,col.TITLE)||'—')}</div>
+        <div class="req-meta">${esc(g(c,col.TITLE))} · ${esc(g(c,col.DEPT))} · ${esc(g(c,col.LOCATION))}${months?' · '+esc(months)+' mo ext.':''}</div>
       </div>
     </div>
     <div class="header-right">
-      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.id}">${esc(badgeLabel(d.decision))}</span>
-      <svg class="chevron" id="chev-${row.id}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
+      <span class="badge ${badgeClass(d.decision)}" id="badge-${row.rowId}">${esc(badgeLabel(d.decision))}</span>
+      <svg class="chevron" id="chev-${row.rowId}" viewBox="0 0 20 20" width="16" height="16" fill="currentColor"><path d="M5 8l5 5 5-5z"/></svg>
     </div>
   </div>
-  <div class="card-body hidden" id="body-${row.id}">
+  <div class="card-body hidden" id="body-${row.rowId}">
     <div class="details-grid">
-      <div class="dg-field"><label>Staff name</label><span>${esc(name||'—')}</span></div>
-      <div class="dg-field"><label>Department</label><span>${esc(dept||'—')}</span></div>
-      <div class="dg-field"><label>Job title</label><span>${esc(title||'—')}</span></div>
-      <div class="dg-field"><label>Work location</label><span>${esc(location||'—')}</span></div>
+      <div class="dg-field"><label>Staff name</label><span>${esc(g(c,col.NAME)||'—')}</span></div>
+      <div class="dg-field"><label>Department</label><span>${esc(g(c,col.DEPT)||'—')}</span></div>
+      <div class="dg-field"><label>Job title</label><span>${esc(g(c,col.TITLE)||'—')}</span></div>
+      <div class="dg-field"><label>Work location</label><span>${esc(g(c,col.LOCATION)||'—')}</span></div>
       <div class="dg-field"><label>Extension (months)</label><span>${esc(months||'—')}</span></div>
-      <div class="dg-field"><label>Recruitment status</label><span>${esc(recruit||'—')}</span></div>
+      <div class="dg-field"><label>Recruitment status</label><span>${esc(g(c,col.RECRUIT)||'—')}</span></div>
     </div>
     <div class="decision-row">
-      <div class="decision-field">
+      <div class="dec-field">
         <label>Committee decision</label>
-        <select id="sel-${row.id}" onchange="onDecChange('extension','${row.id}',this.value)">
-          ${optionsHtml(d.decision||'')}
-        </select>
+        <select id="sel-${row.rowId}" onchange="onDecChange('extension','${row.rowId}',this.value)">${optHtml(d.decision||'')}</select>
       </div>
-      <div class="decision-field">
+      <div class="dec-field">
         <label>Committee comments</label>
-        <textarea id="txt-${row.id}" placeholder="Optional notes…"
-          oninput="onCommentChange('extension','${row.id}',this.value)">${esc(d.comments||'')}</textarea>
+        <textarea id="txt-${row.rowId}" placeholder="Optional notes…"
+          oninput="onCommentChange('extension','${row.rowId}',this.value)">${esc(d.comments||'')}</textarea>
       </div>
-      <button class="save-btn ${btnClass}" id="btn-${row.id}"
-        onclick="saveRow('extension','${row.id}')">${btnLabel}</button>
+      <button class="save-btn${saved?' saved':''}" id="btn-${row.rowId}"
+        onclick="saveRow('extension','${row.rowId}')">${saved?'✓ Saved':'Save to Smartsheet'}</button>
     </div>
   </div>
 </div>`;
@@ -566,18 +518,15 @@ function toggleCard(rowId) {
   document.getElementById('body-'+rowId).classList.toggle('hidden');
   document.getElementById('chev-'+rowId).classList.toggle('open');
 }
-
 function toggleJustif(rowId) {
-  const box  = document.getElementById('jbox-'+rowId);
-  const btn  = document.getElementById('jbtn-'+rowId);
+  const box = document.getElementById('jbox-'+rowId);
+  const btn = document.getElementById('jbtn-'+rowId);
   const isEx = box.classList.contains('expanded');
-  box.classList.toggle('expanded', !isEx);
-  box.classList.toggle('collapsed', isEx);
+  box.classList.toggle('expanded',!isEx); box.classList.toggle('collapsed',isEx);
   btn.textContent = isEx ? 'Show more' : 'Show less';
 }
-
 function onDecChange(section, rowId, value) {
-  state[section].decisions[rowId] = state[section].decisions[rowId] || {};
+  state[section].decisions[rowId] = state[section].decisions[rowId]||{};
   state[section].decisions[rowId].decision = value;
   state[section].saved.delete(rowId);
   const badge = document.getElementById('badge-'+rowId);
@@ -585,75 +534,53 @@ function onDecChange(section, rowId, value) {
   const card = document.getElementById('card-'+rowId);
   if (card) { value ? card.classList.add('decided') : card.classList.remove('decided'); }
   const btn = document.getElementById('btn-'+rowId);
-  if (btn && !btn.classList.contains('saving')) {
-    btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false;
-  }
-  updateStats();
-  updateBulkBar(section);
+  if (btn && !btn.classList.contains('saving')) { btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false; }
+  updateStats(); updateBulkBar(section);
 }
-
 function onCommentChange(section, rowId, value) {
-  state[section].decisions[rowId] = state[section].decisions[rowId] || {};
+  state[section].decisions[rowId] = state[section].decisions[rowId]||{};
   state[section].decisions[rowId].comments = value;
   state[section].saved.delete(rowId);
   const btn = document.getElementById('btn-'+rowId);
-  if (btn && !btn.classList.contains('saving')) {
-    btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false;
-  }
+  if (btn && !btn.classList.contains('saving')) { btn.className='save-btn'; btn.textContent='Save to Smartsheet'; btn.disabled=false; }
 }
 
-// ── API ──────────────────────────────────────────────────────
-async function callClaude(system, user, maxTokens=1000) {
-  const resp = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: MODEL, max_tokens: maxTokens,
-      mcp_servers: [{ type:'url', url:MCP_URL, name:'smartsheet-mcp' }],
-      system, messages: [{ role:'user', content: user }]
-    })
-  });
-  const data = await resp.json();
-  if (data.error) throw new Error(data.error.message || 'API error');
-  return data;
+// ── API — calls your existing server.js endpoints ────────────
+async function apiGet(path) {
+  const r = await fetch(path);
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error||`HTTP ${r.status}`); }
+  return r.json();
+}
+async function apiPatch(path, body) {
+  const r = await fetch(path, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e?.error||`HTTP ${r.status}`); }
+  return r.json();
 }
 
 async function loadSection(section) {
-  const reportId  = section==='initial' ? ARC_REPORT_ID : EXT_REPORT_ID;
+  const reportId  = REPORTS[section];
   const container = document.getElementById('cards-'+section);
-  container.innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading from Smartsheet…</div>';
-
+  container.innerHTML='<div class="loading-state"><div class="spinner"></div>Loading from Smartsheet…</div>';
   try {
-    const data = await callClaude(
-      `You are a Smartsheet data retrieval assistant. Use the get_report MCP tool to fetch report ID ${reportId} with page_size=200. ` +
-      `Return ONLY a valid JSON array of rows. Each element must have: ` +
-      `"id" (row id as number), "sheet_id" (number), and "cells" (array of objects each with ` +
-      `"virtual_column_id" as number, "display_value" as string or null, "value" as string or null, "column_id" as number). ` +
-      `No markdown, no code fences, no explanation — raw JSON array only.`,
-      `Fetch report ${reportId} and return all rows as a JSON array now.`,
-      12000
-    );
-
-    const rawText = (data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
-    const match   = rawText.match(/\[[\s\S]*\]/);
-    if (!match) throw new Error('No JSON array found in response');
-    const rows = JSON.parse(match[0]);
-
+    // GET /api/report/:reportId?pageSize=500
+    const data = await apiGet(`/api/report/${reportId}?pageSize=500`);
+    const rows  = data.rows || [];
     state[section].rows = rows;
-    const decVcid = section==='initial' ? ARC.DECISION : EXT.DECISION;
-    const comVcid = section==='initial' ? ARC.COMMENTS : EXT.COMMENTS;
+
+    const decCol = COL[section].DECISION;
+    const comCol = COL[section].COMMENTS;
 
     rows.forEach(row => {
-      const existDec = s(row.cells, decVcid);
-      const existCom = s(row.cells, comVcid);
-      state[section].decisions[row.id] = { decision: existDec, comments: existCom };
-      if (existDec) state[section].saved.add(row.id);
+      const existDec = g(row.cells, decCol);
+      const existCom = g(row.cells, comCol);
+      state[section].decisions[row.rowId] = { decision: existDec, comments: existCom };
+      if (existDec) state[section].saved.add(row.rowId);
     });
 
     renderSection(section);
     updateStats();
   } catch(err) {
-    container.innerHTML = `<div class="error-state">Failed to load: ${esc(err.message)}<br>
+    container.innerHTML=`<div class="error-state">Failed to load: ${esc(err.message)}<br>
       <button class="btn" style="margin-top:14px" onclick="loadSection('${section}')">Retry</button></div>`;
     console.error('loadSection error:', err);
   }
@@ -661,35 +588,34 @@ async function loadSection(section) {
 
 async function saveRow(section, rowId) {
   const st  = state[section];
-  const dec = st.decisions[rowId] || {};
+  const dec = st.decisions[rowId]||{};
   const btn = document.getElementById('btn-'+rowId);
 
   if (!dec.decision) { showToast('Please select a decision first.','err'); return; }
-  if (st.saved.has(rowId)) { showToast('Already saved to Smartsheet.'); return; }
+  if (st.saved.has(rowId))  { showToast('Already saved to Smartsheet.'); return; }
 
-  const sheetId  = section==='initial' ? INITIAL_SHEET_ID : EXTENSION_SHEET_ID;
-  const decVcid  = section==='initial' ? ARC.DECISION : EXT.DECISION;
-  const comVcid  = section==='initial' ? ARC.COMMENTS : EXT.COMMENTS;
-  const row      = st.rows.find(r => String(r.id)===String(rowId));
-  const decCell  = (row?.cells||[]).find(c => Number(c.virtual_column_id)===Number(decVcid));
-  const comCell  = (row?.cells||[]).find(c => Number(c.virtual_column_id)===Number(comVcid));
-  const decColId = decCell?.column_id;
-  const comColId = comCell?.column_id;
+  // Find the row to get sheetId and actual columnIds
+  const row = st.rows.find(r=>r.rowId===rowId);
+  if (!row) { showToast('Row not found.','err'); return; }
+
+  const decColTitle = COL[section].DECISION;
+  const comColTitle = COL[section].COMMENTS;
+  const decColId    = row.colIds[decColTitle];
+  const comColId    = row.colIds[comColTitle];
+
+  if (!decColId) { showToast('Column ID not found — check report column names.','err'); return; }
+
+  const cells = [{ columnId: decColId, value: dec.decision }];
+  if (dec.comments && comColId) cells.push({ columnId: comColId, value: dec.comments });
 
   btn.disabled=true; btn.className='save-btn saving'; btn.textContent='Saving…';
 
   try {
-    await callClaude(
-      'You are a Smartsheet assistant. Use the update_rows MCP tool to update the row as instructed. Respond only with OK if successful, or ERROR: reason if not.',
-      `Update sheet ${sheetId}, row ${rowId}. ` +
-      `Set column_id ${decColId} to value "${dec.decision}". ` +
-      (dec.comments ? `Set column_id ${comColId} to value "${dec.comments}". ` : '') +
-      `Call update_rows now.`
-    );
+    // PATCH /api/sheet/:sheetId/row/:rowId
+    await apiPatch(`/api/sheet/${row.sheetId}/row/${rowId}`, { cells });
     btn.className='save-btn saved'; btn.textContent='✓ Saved'; btn.disabled=false;
     st.saved.add(rowId);
-    updateStats();
-    updateBulkBar(section);
+    updateStats(); updateBulkBar(section);
     showToast('Decision saved to Smartsheet.','ok');
   } catch(err) {
     btn.className='save-btn error'; btn.textContent='Error — retry'; btn.disabled=false;
@@ -700,12 +626,12 @@ async function saveRow(section, rowId) {
 
 async function saveSection(section) {
   const st = state[section];
-  const toSave = st.rows.filter(r => (st.decisions[r.id]||{}).decision && !st.saved.has(r.id));
-  if (toSave.length===0) { showToast('Nothing new to save.'); return; }
+  const toSave = st.rows.filter(r=>(st.decisions[r.rowId]||{}).decision && !st.saved.has(r.rowId));
+  if (!toSave.length) { showToast('Nothing new to save.'); return; }
   showToast(`Saving ${toSave.length} decision(s)…`);
   for (const row of toSave) {
-    await saveRow(section, String(row.id));
-    await new Promise(r=>setTimeout(r, 350));
+    await saveRow(section, row.rowId);
+    await new Promise(r=>setTimeout(r,200));
   }
 }
 
@@ -715,9 +641,12 @@ async function submitAllPending() {
 }
 
 async function refreshAll() {
+  const btn = document.getElementById('refresh-btn');
+  btn.disabled = true;
   state.initial   = { rows:[], filter:state.initial.filter,   decisions:{}, saved:new Set() };
   state.extension = { rows:[], filter:state.extension.filter, decisions:{}, saved:new Set() };
   await Promise.all([loadSection('initial'), loadSection('extension')]);
+  btn.disabled = false;
   showToast('Refreshed from Smartsheet.','ok');
 }
 
