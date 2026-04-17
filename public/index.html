@@ -329,7 +329,7 @@ const COL = {
   }
 };
 
-const COMMITTEE_OPTIONS = ['Approved','Declined','Needs To Consult with BHR'];
+const COMMITTEE_OPTIONS = ['Approved','Declined','Needs to Consult with BHR','Hold'];
 
 const state = {
   initial:   { rows:[], filter:'all', dfCategory:'', dfTitle:'', decisions:{}, saved:new Set() },
@@ -646,21 +646,31 @@ async function loadSection(section) {
 async function saveRow(section,rowId) {
   const st=state[section]; const dec=st.decisions[rowId]||{};
   const btn=document.getElementById('btn-'+rowId);
-  if(!dec.decision){showToast('Please select a decision first.','err');return;}
-  if(st.saved.has(rowId)){showToast('Already saved to Smartsheet.');return;}
+  // Allow save with comments only, decision only, or both — neither is required alone
+  const hasDecision = dec.decision && dec.decision.trim()!=='';
+  const hasComments = dec.comments && dec.comments.trim()!=='';
+  if(!hasDecision && !hasComments){showToast('Enter a decision or comments before saving.','err');return;}
   const row=st.rows.find(r=>r.rowId===rowId);
   if(!row){showToast('Row not found.','err');return;}
   const decColId=row.colIds[COL[section].DECISION];
   const comColId=row.colIds[COL[section].COMMENTS];
-  if(!decColId){showToast('Column ID not found — check report column names.','err');return;}
-  const cells=[{columnId:decColId,value:dec.decision}];
-  if(dec.comments&&comColId) cells.push({columnId:comColId,value:dec.comments});
+  const cells=[];
+  // Save decision if one is selected (even if it clears a previous value)
+  if(decColId) cells.push({columnId:decColId,value:dec.decision||''});
+  // Save comments if column exists
+  if(comColId) cells.push({columnId:comColId,value:dec.comments||''});
+  if(!cells.length){showToast('Column IDs not found — check report column names.','err');return;}
   btn.disabled=true; btn.className='save-btn saving'; btn.textContent='Saving…';
   try {
     await apiPatch(`/api/sheet/${row.sheetId}/row/${rowId}`,{cells});
     btn.className='save-btn saved'; btn.textContent='✓ Saved'; btn.disabled=false;
-    st.saved.add(rowId); updateStats(); updateBulkBar(section);
-    showToast('Decision saved to Smartsheet.','ok');
+    // Mark as fully saved only when a decision is present
+    if(hasDecision) st.saved.add(rowId);
+    updateStats(); updateBulkBar(section);
+    const msg=hasDecision&&hasComments?'Decision & comments saved.'
+             :hasDecision?'Decision saved to Smartsheet.'
+             :'Comments saved to Smartsheet.';
+    showToast(msg,'ok');
   } catch(err) {
     btn.className='save-btn error'; btn.textContent='Error — retry'; btn.disabled=false;
     showToast('Save failed: '+err.message,'err');
@@ -670,9 +680,14 @@ async function saveRow(section,rowId) {
 
 async function saveSection(section) {
   const st=state[section];
-  const toSave=st.rows.filter(r=>(st.decisions[r.rowId]||{}).decision&&!st.saved.has(r.rowId));
+  const toSave=st.rows.filter(r=>{
+    const dec=st.decisions[r.rowId]||{};
+    const hasDec=(dec.decision||'').trim()!=='';
+    const hasCmt=(dec.comments||'').trim()!=='';
+    return (hasDec||hasCmt)&&!st.saved.has(r.rowId);
+  });
   if(!toSave.length){showToast('Nothing new to save.');return;}
-  showToast(`Saving ${toSave.length} decision(s)…`);
+  showToast(`Saving ${toSave.length} row(s)…`);
   for(const row of toSave){await saveRow(section,row.rowId);await new Promise(r=>setTimeout(r,200));}
 }
 
