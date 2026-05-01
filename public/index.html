@@ -206,7 +206,7 @@
   <div class="stats-bar">
     <div class="stat-card"><div class="s-label">Total requests</div><div class="s-value" id="stat-total">—</div></div>
     <div class="stat-card s-pending"><div class="s-label">Pending decision</div><div class="s-value" id="stat-pending">—</div></div>
-    <div class="stat-card s-done"><div class="s-label">Decisions saved</div><div class="s-value" id="stat-saved">—</div></div>
+    <div class="stat-card s-done"><div class="s-label">Hold</div><div class="s-value" id="stat-saved">—</div></div>
     <div class="stat-card"><div class="s-label">Last refreshed</div><div class="s-value" id="stat-time">—</div></div>
   </div>
 
@@ -225,7 +225,7 @@
       <span class="filter-label">Status:</span>
       <button class="chip active" onclick="setFilter('initial','all',this)">All</button>
       <button class="chip" onclick="setFilter('initial','pending',this)">Needs decision</button>
-      <button class="chip" onclick="setFilter('initial','decided',this)">Decided</button>
+      <button class="chip" onclick="setFilter('initial','decided',this)">Hold</button>
       <div class="spacer"></div>
       <span class="result-count" id="count-initial"></span>
     </div>
@@ -259,7 +259,7 @@
       <span class="filter-label">Status:</span>
       <button class="chip active" onclick="setFilter('extension','all',this)">All</button>
       <button class="chip" onclick="setFilter('extension','pending',this)">Needs decision</button>
-      <button class="chip" onclick="setFilter('extension','decided',this)">Decided</button>
+      <button class="chip" onclick="setFilter('extension','decided',this)">Hold</button>
       <div class="spacer"></div>
       <span class="result-count" id="count-extension"></span>
     </div>
@@ -321,6 +321,7 @@ const COL = {
     NAME:     'Agency Staff Name',
     DEPT:     'Department',
     TITLE:    'Job Position/Title',
+    PID:      'PID#:',
     LOCATION: 'Work Location',
     MONTHS:   'Request To Extend Employment Duration (Months)',
     RECRUIT:  'Recruitment Status',
